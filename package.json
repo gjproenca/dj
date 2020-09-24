@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "mongodb-server": "C:/Users/gjpro/mongodb/bin/mongod.exe --dbpath=C:/Users/gjpro/mongodb-data",
-    "dev-express": "node server/index.js",
+    "express": "node server/index.js",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",

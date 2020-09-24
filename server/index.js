@@ -9,7 +9,7 @@ const server = http.createServer(app)
 const io = socketio(server)
 
 const isDev = process.env.NODE_ENV !== 'production'
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3000
 
 async function start() {
   // We get Nuxt instance
