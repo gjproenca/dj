@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
-// FIXME: mongo connection
-mongoose.connect('mongodb://localhost:27017/test', {
+mongoose.connect('mongodb://localhost/mydb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,

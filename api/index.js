@@ -1,5 +1,5 @@
 const express = require('express')
-const db = require('./db')
+const db = require('./db.js')
 
 // Create express instnace
 const app = express()
@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Require & Import API routes
-const users = require('./routes/users')
+const users = require('./routes/users.js')
 
 // Use API Routes
 app.use(users)

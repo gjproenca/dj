@@ -1,8 +1,8 @@
 const validator = require('express-validator')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const config = require('../config')
-const User = require('../models/User')
+const config = require('../config.js')
+const User = require('../models/User.js')
 
 // Register
 module.exports.register = [
