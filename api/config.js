@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 
+// FIXME: add password do enviroment variable
 const config = {
   authSecret: 'mysecret', // secret for generating jwt token
 }
