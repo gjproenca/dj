@@ -1,3 +1,4 @@
+const chalk = require('chalk')
 const mongoose = require('mongoose')
 
 mongoose.connect('mongodb://localhost/mydb', {
@@ -8,9 +9,9 @@ mongoose.connect('mongodb://localhost/mydb', {
 })
 
 const db = mongoose.connection
-db.on('error', console.error.bind(console, 'connection error:'))
+db.on('error', () => console.log(chalk.red('MongoDB Connection Error')))
 db.once('open', function callback() {
-  console.log('MongoDB Connected...')
+  console.log(chalk.green('MongoDB Connected'))
 })
 
 module.exports = db

@@ -2,6 +2,7 @@ const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
 const { loadNuxt, build } = require('nuxt')
+const chalk = require('chalk')
 
 const app = express()
 const server = http.createServer(app)
@@ -23,8 +24,9 @@ async function start() {
   }
   // Listen the server
   server.listen(port, '0.0.0.0')
-  console.log('Server listening on `localhost:' + port + '`.')
+  console.log(chalk.green(`Server listening on localhost: ${port}`))
 
+  // Sockets
   io.on('connection', function (socket) {
     console.log(`Socket id --> ${socket.id}`)
 
