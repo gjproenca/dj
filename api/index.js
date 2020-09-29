@@ -1,9 +1,21 @@
 const express = require('express')
+const db = require('./db')
+
+// Create express instnace
 const app = express()
 
-app.get('/', (req, res) => res.send('Hello API'))
+// Init body-parser options (inbuilt with express)
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
+// Require & Import API routes
+const users = require('./routes/users')
+
+// Use API Routes
+app.use(users)
+
+// Export the server middleware
 module.exports = {
-  path: '/api/',
+  path: '/api',
   handler: app,
 }
