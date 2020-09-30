@@ -1,0 +1,25 @@
+# Needs vscode REST Client extension to send the requests in this file
+
+### Register
+POST http://localhost:3000/api/user/register HTTP/1.1
+content-type: application/json
+
+{
+    "full_name": "osao storm",
+    "email": "osaostorm@gmail.com",
+    "password": "123osaostorm123"
+}
+
+### Login
+POST http://localhost:3000/api/user/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "osaostorm@gmail.com",
+    "password": "123osaostorm123"
+}
+
+### Read User
+GET http://localhost:3000/api/user/user HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjc0NjFmNDQxMmFlNjBlNzBlYmNhYjEiLCJlbWFpbCI6Im9zYW9zdG9ybUBnbWFpbC5jb20iLCJmdWxsX25hbWUiOiJvc2FvIHN0b3JtIiwiaWF0IjoxNjAxNDY4NTUyfQ.b-Tioi3dSniuoDUXvj5MMxT7EAwlxDhp8G1TFNHPPTc
