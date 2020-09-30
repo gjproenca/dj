@@ -29,7 +29,7 @@
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn @click.prevent="buttonLogin"> Login </v-btn>
+            <v-btn @click.prevent="login"> Login </v-btn>
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>Don't have an account? Register</p>
@@ -42,12 +42,8 @@
 
 <script>
 export default {
-  props: {
-    buttonLogin: {
-      type: Function,
-      default: undefined,
-    },
-  },
+  middleware: 'auth',
+  auth: 'guest',
   data() {
     return {
       email: '',
@@ -62,6 +58,21 @@ export default {
         min: (v) => v.length >= 8 || 'Min 8 characters',
       },
     }
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await this.$auth.loginWith('local', {
+          data: {
+            email: this.email,
+            password: this.password,
+          },
+        })
+        console.log(response)
+      } catch (err) {
+        console.log(err)
+      }
+    },
   },
 }
 </script>

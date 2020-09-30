@@ -2,7 +2,7 @@
   <div>
     <v-container style="height: 100vh" fill-height fluid>
       <v-row class="d-flex justify-center">
-        <Login :button-login="login"></Login>
+        <Login></Login>
       </v-row>
     </v-container>
   </div>
@@ -14,13 +14,6 @@ import Login from '../components/Login.vue'
 export default {
   components: {
     Login,
-  },
-  methods: {
-    // TODO: ? move login prop to component
-    login() {
-      // TODO: Send login details or register user
-      alert('Hello')
-    },
   },
 }
 </script>

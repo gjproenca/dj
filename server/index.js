@@ -24,7 +24,7 @@ async function start() {
   }
   // Listen the server
   server.listen(port, '0.0.0.0')
-  console.log(chalk.green(`Server listening on localhost: ${port}`))
+  console.log(chalk.green(`Server listening on localhost:${port}`))
 
   // Sockets
   io.on('connection', function (socket) {
