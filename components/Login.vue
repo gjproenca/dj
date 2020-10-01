@@ -4,7 +4,7 @@
       <v-form>
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
-            <!-- FIXME: -->
+            <!-- FIXME: add alert errors -->
             {{ loginError }}
 
             <v-text-field
