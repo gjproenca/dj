@@ -104,8 +104,8 @@ export default {
           },
         })
         console.log(response)
-      } catch (err) {
-        console.log(err)
+      } catch (error) {
+        console.log(error)
       }
     },
   },

@@ -4,6 +4,9 @@
       <v-form>
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
+            <!-- FIXME: -->
+            {{ loginError }}
+
             <v-text-field
               v-model="email"
               :rules="emailRules"
@@ -50,6 +53,8 @@ export default {
   auth: 'guest',
   data() {
     return {
+      loginError: undefined,
+
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
@@ -76,8 +81,12 @@ export default {
           },
         })
         console.log(response)
-      } catch (err) {
-        console.log(err)
+      } catch (error) {
+        // FIXME:
+        console.log(error)
+        if (error.response.data.message) {
+          this.loginError = error.response.data.message
+        }
       }
     },
   },
