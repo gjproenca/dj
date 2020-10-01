@@ -25,6 +25,23 @@
               @click:append="showPassword = !showPassword"
             ></v-text-field>
           </v-col>
+
+          <v-col cols="12">
+            <v-text-field
+              v-model="confirmPassword"
+              :append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[
+                consfirmPasswordRules.required,
+                consfirmPasswordRules.match,
+              ]"
+              :type="showConfirmPassword ? 'text' : 'password'"
+              name="confirmPassword"
+              label="Confirm Password"
+              hint="At least 8 characters"
+              counter
+              @click:append="showConfirmPassword = !showConfirmPassword"
+            ></v-text-field>
+          </v-col>
         </v-row>
 
         <v-row>
@@ -33,7 +50,7 @@
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>
-              Don't have an account? <a @click="toggleShowLogin">Register</a>
+              Already have an account? <a @click="toggleShowLogin">Login</a>
             </p>
           </v-col>
         </v-row>
@@ -62,11 +79,22 @@ export default {
         required: (value) => !!value || 'Password is required',
         min: (v) => v.length >= 8 || 'Min 8 characters',
       },
+
+      confirmPassword: '',
+      showConfirmPassword: false,
+      consfirmPasswordRules: {
+        required: (value) => !!value || 'Confirm password is required',
+        match: (value) =>
+          this.password !== this.confirmPassword
+            ? 'Passwords must match'
+            : 'Passwords match',
+      },
     }
   },
   methods: {
     ...mapMutations({ toggleShowLogin: 'loginRegister/toggleShowLogin' }),
 
+    // TODO: register method
     async login() {
       try {
         const response = await this.$auth.loginWith('local', {
