@@ -2,7 +2,7 @@
   <div>
     <v-container style="height: 100vh" fill-height fluid>
       <v-row class="d-flex justify-center">
-        <v-col cols="6">
+        <v-col sm="8" md="6">
           <Login v-if="getShowLogin" />
           <Register v-else />
         </v-col>

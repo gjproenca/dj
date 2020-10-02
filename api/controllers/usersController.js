@@ -79,7 +79,7 @@ module.exports.login = [
 
       if (user === null) {
         return res.status(500).json({
-          message: 'Email address you entered is not found.',
+          message: 'Email not found',
         })
       }
 
@@ -109,7 +109,7 @@ module.exports.login = [
             })
           } else {
             return res.status(500).json({
-              message: 'Invalid Email or Password entered.',
+              message: 'Invalid Email or Password',
             })
           }
         }

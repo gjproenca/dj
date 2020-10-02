@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card>
-      <v-form>
+      <v-form @submit.prevent="login">
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
             <v-text-field
@@ -46,7 +46,7 @@
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn @click.prevent="login"> Login </v-btn>
+            <v-btn type="submit"> Login </v-btn>
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>

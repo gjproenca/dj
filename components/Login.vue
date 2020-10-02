@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-card>
-      <v-form>
+      <v-form v-model="isValidForm" @submit.prevent="login">
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
-            <!-- FIXME: add alert errors -->
-            {{ loginError }}
+            <!-- TODO: find a transition -->
+            <v-alert v-if="loginError" type="error">
+              {{ loginError }}
+            </v-alert>
 
             <v-text-field
               v-model="email"
@@ -18,8 +20,8 @@
           <v-col cols="12">
             <v-text-field
               v-model="password"
+              :rules="passwordRules"
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[passwordRules.required, passwordRules.min]"
               :type="showPassword ? 'text' : 'password'"
               name="password"
               label="Password"
@@ -32,7 +34,7 @@
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn @click.prevent="login"> Login </v-btn>
+            <v-btn type="submit" :disabled="!isValidForm"> Login </v-btn>
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>
@@ -55,18 +57,20 @@ export default {
     return {
       loginError: undefined,
 
+      isValidForm: false,
+
       email: '',
       emailRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        (value) => !!value || 'E-mail is required',
+        (value) => /.+@.+\..+/.test(value) || 'E-mail must be valid',
       ],
 
       password: '',
       showPassword: false,
-      passwordRules: {
-        required: (value) => !!value || 'Password is required',
-        min: (v) => v.length >= 8 || 'Min 8 characters',
-      },
+      passwordRules: [
+        (value) => !!value || 'Password is required',
+        (value) => value.length >= 8 || 'Min 8 characters',
+      ],
     }
   },
   methods: {
@@ -74,16 +78,13 @@ export default {
 
     async login() {
       try {
-        const response = await this.$auth.loginWith('local', {
+        await this.$auth.loginWith('local', {
           data: {
             email: this.email,
             password: this.password,
           },
         })
-        console.log(response)
       } catch (error) {
-        // FIXME:
-        console.log(error)
         if (error.response.data.message) {
           this.loginError = error.response.data.message
         }
