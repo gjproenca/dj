@@ -9,6 +9,8 @@
               {{ loginError }}
             </v-alert>
 
+            {{ this.$auth.loggedIn }}
+
             <v-text-field
               v-model="email"
               :rules="emailRules"
@@ -37,6 +39,9 @@
             <v-btn type="submit" :disabled="!isValidForm"> Login </v-btn>
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
+            <v-btn type="submit" @click.prevent="asyncData"> Logout </v-btn>
+          </v-col>
+          <v-col class="d-flex justify-center" cols="12">
             <p>
               Don't have an account? <a @click="toggleShowLogin">Register</a>
             </p>
@@ -53,6 +58,7 @@ import { mapMutations } from 'vuex'
 export default {
   middleware: 'auth',
   auth: 'guest',
+
   data() {
     return {
       loginError: undefined,
@@ -73,22 +79,28 @@ export default {
       ],
     }
   },
+
   methods: {
     ...mapMutations({ toggleShowLogin: 'loginRegister/toggleShowLogin' }),
 
     async login() {
       try {
-        await this.$auth.loginWith('local', {
+        const response = await this.$auth.loginWith('local', {
           data: {
             email: this.email,
             password: this.password,
           },
         })
+        console.log(response)
       } catch (error) {
         if (error.response.data.message) {
           this.loginError = error.response.data.message
         }
       }
+    },
+
+    async asyncData() {
+      await this.$auth.logout()
     },
   },
 }
