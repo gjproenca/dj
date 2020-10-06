@@ -1,9 +1,14 @@
 <template>
   <div>
     <v-card>
-      <v-form @submit.prevent="login">
+      <v-form v-model="isValidForm" @submit.prevent="login">
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
+            <!-- TODO: find a transition -->
+            <v-alert v-if="loginError" type="error">
+              {{ loginError }}
+            </v-alert>
+
             <v-text-field
               v-model="email"
               :rules="emailRules"
@@ -15,8 +20,8 @@
           <v-col cols="12">
             <v-text-field
               v-model="password"
+              :rules="passwordRules"
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[passwordRules.required, passwordRules.min]"
               :type="showPassword ? 'text' : 'password'"
               name="password"
               label="Password"
@@ -25,28 +30,11 @@
               @click:append="showPassword = !showPassword"
             ></v-text-field>
           </v-col>
-
-          <v-col cols="12">
-            <v-text-field
-              v-model="confirmPassword"
-              :append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[
-                consfirmPasswordRules.required,
-                consfirmPasswordRules.match,
-              ]"
-              :type="showConfirmPassword ? 'text' : 'password'"
-              name="confirmPassword"
-              label="Confirm Password"
-              hint="At least 8 characters"
-              counter
-              @click:append="showConfirmPassword = !showConfirmPassword"
-            ></v-text-field>
-          </v-col>
         </v-row>
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn type="submit"> Login </v-btn>
+            <v-btn type="submit" :disabled="!isValidForm"> Login </v-btn>
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>
@@ -65,47 +53,43 @@ import { mapMutations } from 'vuex'
 export default {
   middleware: 'auth',
   auth: 'guest',
+
   data() {
     return {
+      loginError: undefined,
+
+      isValidForm: false,
+
       email: '',
       emailRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        (value) => !!value || 'E-mail is required',
+        (value) => /.+@.+\..+/.test(value) || 'E-mail must be valid',
       ],
 
       password: '',
       showPassword: false,
-      passwordRules: {
-        required: (value) => !!value || 'Password is required',
-        min: (v) => v.length >= 8 || 'Min 8 characters',
-      },
-
-      confirmPassword: '',
-      showConfirmPassword: false,
-      consfirmPasswordRules: {
-        required: (value) => !!value || 'Confirm password is required',
-        match: (value) =>
-          this.password !== this.confirmPassword
-            ? 'Passwords must match'
-            : 'Passwords match',
-      },
+      passwordRules: [
+        (value) => !!value || 'Password is required',
+        (value) => value.length >= 8 || 'Min 8 characters',
+      ],
     }
   },
+
   methods: {
     ...mapMutations({ toggleShowLogin: 'loginRegister/toggleShowLogin' }),
 
-    // TODO: register method
     async login() {
       try {
-        const response = await this.$auth.loginWith('local', {
+        await this.$auth.loginWith('local', {
           data: {
             email: this.email,
             password: this.password,
           },
         })
-        console.log(response)
       } catch (error) {
-        console.log(error)
+        if (error.response.data.message) {
+          this.loginError = error.response.data.message
+        }
       }
     },
   },
