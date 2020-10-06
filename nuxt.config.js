@@ -6,7 +6,7 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - dj',
+    titleTemplate: '%s | dj',
     title: 'dj',
     meta: [
       { charset: 'utf-8' },
@@ -40,7 +40,14 @@ export default {
     '@nuxtjs/axios',
     // enables Nuxt Auth module
     '@nuxtjs/auth',
+    '@nuxtjs/toast',
   ],
+
+  toast: {
+    iconPack: 'mdi',
+    position: 'bottom-left',
+    duration: 5000,
+  },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},

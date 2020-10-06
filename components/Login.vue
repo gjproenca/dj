@@ -4,11 +4,6 @@
       <v-form v-model="isValidForm" @submit.prevent="login">
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
-            <!-- TODO: find a transition -->
-            <v-alert v-if="loginError" type="error">
-              {{ loginError }}
-            </v-alert>
-
             <v-text-field
               v-model="email"
               :rules="emailRules"
@@ -62,8 +57,6 @@ export default {
 
   data() {
     return {
-      loginError: undefined,
-
       isValidForm: false,
 
       email: '',
@@ -92,9 +85,19 @@ export default {
             password: this.password,
           },
         })
+
+        this.$toast.success('Successfully authenticated', {
+          icon: {
+            name: 'mdi-check',
+          },
+        })
       } catch (error) {
         if (error.response.data.message) {
-          this.loginError = error.response.data.message
+          this.$toast.error(error.response.data.message, {
+            icon: {
+              name: 'mdi-alert',
+            },
+          })
         }
       }
     },
