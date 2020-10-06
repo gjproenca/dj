@@ -1,9 +1,6 @@
 const chalk = require('chalk')
 const mongoose = require('mongoose')
 
-// FIXME: process.env
-// console.log(chalk.bgCyan(process.env.CONNECTION_STRING))
-
 mongoose.connect(process.env.CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
