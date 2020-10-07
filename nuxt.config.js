@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+// import './assets/toast.scss'
 require('dotenv').config()
 
 export default {
@@ -17,7 +18,7 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
+  css: ['@/assets/toast.scss'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [],
@@ -47,6 +48,7 @@ export default {
     iconPack: 'mdi',
     position: 'bottom-left',
     duration: 5000,
+    className: 'toast',
   },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
