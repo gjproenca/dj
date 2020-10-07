@@ -1,8 +1,16 @@
 <template>
   <div>
     <v-card>
-      <v-form v-model="isValidForm" @submit.prevent="login">
+      <v-form v-model="isValidForm" @submit.prevent="register">
         <v-row class="pl-7 pr-7">
+          <v-col cols="12">
+            <v-text-field
+              v-model="fullName"
+              name="fullName"
+              label="Full Name"
+            ></v-text-field>
+          </v-col>
+
           <v-col cols="12">
             <v-text-field
               v-model="email"
@@ -43,9 +51,8 @@
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn type="submit" :disabled="!isValidForm">Login</v-btn>
+            <v-btn type="submit" :disabled="!isValidForm">Register</v-btn>
           </v-col>
-          <v-col class="d-flex justify-center" cols="12"><Logout /></v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>
               Already have an account? <a @click="toggleShowLogin">Login</a>
@@ -59,19 +66,16 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import Logout from './Logout.vue'
 
 export default {
-  components: {
-    Logout,
-  },
-
   middleware: 'auth',
   auth: 'guest',
 
   data() {
     return {
       isValidForm: false,
+
+      fullName: '',
 
       email: '',
       emailRules: [
@@ -100,29 +104,45 @@ export default {
   methods: {
     ...mapMutations({ toggleShowLogin: 'loginRegister/toggleShowLogin' }),
 
-    async login() {
-      try {
-        await this.$auth.loginWith('local', {
-          data: {
-            email: this.email,
-            password: this.password,
-          },
+    register() {
+      this.$axios
+        .post('/api/user/register', {
+          full_name: this.fullName,
+          email: this.email,
+          password: this.password,
         })
+        .then((response) => {
+          if (response.data._id) {
+            // TODO: change route to home
+            this.$toast.success('Successfully registered', {
+              icon: {
+                name: 'mdi-check',
+              },
+            })
 
-        this.$toast.success('Successfully authenticated', {
-          icon: {
-            name: 'mdi-check',
-          },
+            // log in if successfully registered
+            this.$auth
+              .loginWith('local', {
+                data: {
+                  email: this.email,
+                  password: this.password,
+                },
+              })
+              .catch((error) => {
+                console.log(error)
+              })
+          }
         })
-      } catch (error) {
-        if (error.response.data.message) {
-          this.$toast.error(error.response.data.message, {
-            icon: {
-              name: 'mdi-alert',
-            },
-          })
-        }
-      }
+        .catch((error) => {
+          // FIXME: not showing errors if user is already registered
+          if (error.response.data.errors) {
+            this.$toast.error(error.response.data.message, {
+              icon: {
+                name: 'mdi-alert',
+              },
+            })
+          }
+        })
     },
   },
 }
