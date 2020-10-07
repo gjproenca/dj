@@ -29,9 +29,9 @@
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn type="submit" :disabled="!isValidForm"> Login </v-btn>
+            <v-btn type="submit" :disabled="!isValidForm">Login</v-btn>
           </v-col>
-          <v-col class="d-flex justify-center" cols="12"> <Logout /> </v-col>
+          <v-col class="d-flex justify-center" cols="12"><Logout /></v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>
               Don't have an account? <a @click="toggleShowLogin">Register</a>
