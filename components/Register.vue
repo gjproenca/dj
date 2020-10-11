@@ -134,13 +134,14 @@ export default {
           }
         })
         .catch((error) => {
-          // FIXME: not showing errors if user is already registered
           if (error.response.data.errors) {
-            this.$toast.error(error.response.data.message, {
-              icon: {
-                name: 'mdi-alert',
-              },
-            })
+            for (const key in error.response.data.errors) {
+              this.$toast.error(error.response.data.errors[key].msg, {
+                icon: {
+                  name: 'mdi-alert',
+                },
+              })
+            }
           }
         })
     },

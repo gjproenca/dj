@@ -18,7 +18,7 @@ module.exports.register = [
       }
     })
   }),
-  validator.body('password', 'Please enter Password').isLength({ min: 1 }),
+  validator.body('password', 'Please enter the Password').isLength({ min: 1 }),
 
   (req, res) => {
     // throw validation errors
