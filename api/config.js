@@ -14,8 +14,8 @@ module.exports.isAuthenticated = (req, res, next) => {
     jwt.verify(
       token.replace(/^Bearer\s/, ''),
       config.authSecret,
-      (err, decoded) => {
-        if (err) {
+      (error, decoded) => {
+        if (error) {
           return res.status(401).json({ message: 'unauthorized' })
         } else {
           return next()

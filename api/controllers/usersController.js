@@ -20,7 +20,7 @@ module.exports.register = [
   }),
   validator.body('password', 'Please enter Password').isLength({ min: 1 }),
 
-  function (req, res) {
+  (req, res) => {
     // throw validation errors
     const errors = validator.validationResult(req)
     if (!errors.isEmpty()) {
@@ -40,15 +40,15 @@ module.exports.register = [
     user.password = hash
 
     // save record
-    user.save((err, user) => {
-      if (err) {
+    user.save((error, user) => {
+      if (error) {
         return res.status(500).json({
           message: 'Error saving record',
-          error: err,
+          error,
         })
       }
       return res.json({
-        message: 'saved',
+        message: 'Record saved',
         _id: user._id,
       })
     })
@@ -69,11 +69,11 @@ module.exports.login = [
     }
 
     // validate email and password are correct
-    User.findOne({ email: req.body.email }, (err, user) => {
-      if (err) {
+    User.findOne({ email: req.body.email }, (error, user) => {
+      if (error) {
         return res.status(500).json({
           message: 'Error logging in',
-          error: err,
+          error,
         })
       }
 
@@ -87,11 +87,11 @@ module.exports.login = [
       return bcrypt.compare(
         req.body.password,
         user.password,
-        (err, isMatched) => {
-          if (err) {
+        (error, isMatched) => {
+          if (error) {
             return res.status(500).json({
               message: 'Error logging in',
-              error: err,
+              error,
             })
           }
 
@@ -123,16 +123,17 @@ module.exports.user = (req, res) => {
   const token = req.headers.authorization
   if (token) {
     // verifies secret and checks if the token is expired
-    jwt.verify(token.replace(/^Bearer\s/, ''), config.authSecret, function (
-      err,
-      decoded
-    ) {
-      if (err) {
-        return res.status(401).json({ message: 'unauthorized' })
-      } else {
-        return res.json({ user: decoded })
+    jwt.verify(
+      token.replace(/^Bearer\s/, ''),
+      config.authSecret,
+      (error, decoded) => {
+        if (error) {
+          return res.status(401).json({ message: 'unauthorized' })
+        } else {
+          return res.json({ user: decoded })
+        }
       }
-    })
+    )
   } else {
     return res.status(401).json({ message: 'unauthorized' })
   }
