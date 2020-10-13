@@ -68,7 +68,6 @@
 import { mapMutations } from 'vuex'
 
 export default {
-  middleware: 'auth',
   auth: 'guest',
 
   data() {

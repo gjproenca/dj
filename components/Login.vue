@@ -52,7 +52,6 @@ export default {
     Logout,
   },
 
-  middleware: 'auth',
   auth: 'guest',
 
   data() {

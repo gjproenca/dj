@@ -44,15 +44,19 @@ export default {
     '@nuxtjs/toast',
   ],
 
+  router: {
+    middleware: ['auth'],
+  },
+
+  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
+  axios: {},
+
   toast: {
     iconPack: 'mdi',
     position: 'bottom-left',
     duration: 5000,
     className: 'toast',
   },
-
-  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
 
   auth: {
     strategies: {
@@ -76,9 +80,9 @@ export default {
       },
     },
     redirect: {
-      login: '/user/login', // User will be redirected to this path if login is required
+      login: '/', // User will be redirected to this path if login is required
       logout: '/', // User will be redirected to this path if after logout, current route is protected
-      home: '/', // User will be redirect to this path after login if accessed login page directly
+      home: '/home', // User will be redirect to this path after login if accessed login page directly
     },
     rewriteRedirects: true,
   },
