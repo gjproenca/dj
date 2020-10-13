@@ -1,32 +1,38 @@
 <template>
-  <div class="card mt-3">
-    <div class="card-body">
-      <div class="card-title">
-        <h3>Chat Group</h3>
-        <hr />
-      </div>
-      <div class="card-body">
-        <div v-for="(msg, index) in messages" :key="index" class="messages">
-          <p>
-            <span class="font-weight-bold">{{ msg.user }}: </span
-            >{{ msg.message }}
-          </p>
+  <div>
+    <v-card>
+      <v-container>
+        <div>
+          <div>
+            <h3>Chat Group</h3>
+            <hr />
+          </div>
+
+          <div>
+            <div v-for="(msg, index) in messages" :key="index">
+              <p>
+                <span>{{ msg.user }} : </span>{{ msg.message }}
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="card-footer">
-      <form @submit.prevent="sendMessage">
-        <div class="gorm-group">
-          <label for="user">User:</label>
-          <input v-model="user" type="text" class="form-control" />
+
+        <div>
+          <form @submit.prevent="sendMessage">
+            <v-text-field
+              v-model="message"
+              append-outer-icon="mdi-send"
+              label="Message"
+              clear-icon="mdi-close-circle"
+              clearable
+              @click:append-outer="sendMessage"
+            >
+            </v-text-field>
+            <v-btn type="submit">Send</v-btn>
+          </form>
         </div>
-        <div class="gorm-group pb-3">
-          <label for="message">Message:</label>
-          <input v-model="message" type="text" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-success">Send</button>
-      </form>
-    </div>
+      </v-container>
+    </v-card>
   </div>
 </template>
 
@@ -35,7 +41,7 @@ import io from 'socket.io-client'
 export default {
   data() {
     return {
-      user: '',
+      user: this.$auth.user.full_name,
       message: '',
       messages: [],
       socket: io('localhost:3000'),
@@ -44,7 +50,6 @@ export default {
   mounted() {
     this.socket.on('MESSAGE', (data) => {
       this.messages = [...this.messages, data]
-      // you can also do this.messages.push(data)
     })
   },
   methods: {
