@@ -21,14 +21,13 @@
           <form @submit.prevent="sendMessage">
             <v-text-field
               v-model="message"
-              append-outer-icon="mdi-send"
+              append-icon="mdi-send"
               label="Message"
               clear-icon="mdi-close-circle"
               clearable
-              @click:append-outer="sendMessage"
+              @click:append="sendMessage"
             >
             </v-text-field>
-            <v-btn type="submit">Send</v-btn>
           </form>
         </div>
       </v-container>
@@ -57,6 +56,7 @@ export default {
       e.preventDefault()
 
       this.socket.emit('SEND_MESSAGE', {
+        _id: this.$route.params.id,
         user: this.user,
         message: this.message,
       })

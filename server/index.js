@@ -24,13 +24,14 @@ async function start() {
   }
   // Listen the server
   server.listen(port, '0.0.0.0')
-  console.log(chalk.green(`Server listening on localhost:${port}`))
+  console.log(chalk.green(`Server listening on http://localhost:${port}`))
 
   // Sockets
-  io.on('connection', function (socket) {
+  io.on('connect', (socket) => {
     console.log(`Socket id --> ${socket.id}`)
 
-    socket.on('SEND_MESSAGE', function (data) {
+    socket.on('SEND_MESSAGE', (data) => {
+      console.log('start -> data', data._id)
       io.emit('MESSAGE', data)
     })
   })
