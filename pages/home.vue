@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Home</h1>
-    <n-link :to="'/room/' + this.$auth.user._id" style="textdecoration: none">
+    <n-link :to="'/room/' + this.$auth.user._id" class="link">
       <v-btn>Create room</v-btn>
     </n-link>
   </div>
@@ -11,4 +11,8 @@
 export default {}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.link {
+  text-decoration: none;
+}
+</style>

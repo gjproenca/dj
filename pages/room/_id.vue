@@ -4,19 +4,25 @@
       <v-container>
         <div>
           <div>
-            <h3>Chat Group</h3>
-            <hr />
+            <h3>Chat</h3>
+            <v-divider></v-divider>
           </div>
 
-          <div>
-            <div v-for="(msg, index) in messages" :key="index">
-              <p>
-                <span>{{ msg.user }} : </span>{{ msg.message }}
-              </p>
-            </div>
-          </div>
+          <!-- FIXME: add virtual scroller -->
+          <v-virtual-scroll height="300" item-height="20" :items="messages">
+            {{ messages[messages.length - 1] }}
+            <!-- {{ items }} -->
+            <!-- <div>
+              <div v-for="(msg, index) in messages" :key="index">
+                <p>
+                  <span>{{ msg.user }}: </span>{{ msg.message }}
+                </p>
+              </div>
+            </div> -->
+          </v-virtual-scroll>
         </div>
 
+        <!-- TODO: only allow send message if there is text -->
         <div>
           <form @submit.prevent="sendMessage">
             <v-text-field
@@ -37,29 +43,40 @@
 
 <script>
 import io from 'socket.io-client'
+
 export default {
   data() {
     return {
       user: this.$auth.user.full_name,
       message: '',
-      messages: [],
+      messages: [''],
+
       socket: io('localhost:3000'),
     }
   },
+
+  computed: {
+    items() {
+      return this.messages[this.messages.lenth - 1]
+    },
+  },
+
   mounted() {
+    // FIXME: add GUID to room table in mongo db so not to expose user id
+    this.socket.emit('JOIN_ROOM', { _id: this.$route.params.id })
+
     this.socket.on('MESSAGE', (data) => {
       this.messages = [...this.messages, data]
     })
   },
-  methods: {
-    sendMessage(e) {
-      e.preventDefault()
 
+  methods: {
+    sendMessage() {
       this.socket.emit('SEND_MESSAGE', {
-        _id: this.$route.params.id,
         user: this.user,
         message: this.message,
       })
+
       this.message = ''
     },
   },

@@ -30,9 +30,16 @@ async function start() {
   io.on('connect', (socket) => {
     console.log(`Socket id --> ${socket.id}`)
 
+    let roomId
+
+    socket.on('JOIN_ROOM', function (room) {
+      roomId = room._id
+
+      socket.join(roomId)
+    })
+
     socket.on('SEND_MESSAGE', (data) => {
-      console.log('start -> data', data._id)
-      io.emit('MESSAGE', data)
+      io.to(roomId).emit('MESSAGE', data)
     })
   })
 }
