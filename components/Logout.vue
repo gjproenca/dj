@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn v-if="this.$auth.loggedIn" @click.prevent="logout">Logout</v-btn>
+    <v-btn v-if="this.$auth.loggedIn" @click="logout">Logout</v-btn>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   methods: {
     async logout() {
       await this.$auth.logout()
-      this.$toast.success('Successfully deauthenticated', {
+      this.$toast.success('Successfully de-authenticated', {
         icon: {
           name: 'mdi-check',
         },

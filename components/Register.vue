@@ -128,15 +128,14 @@ export default {
                 },
               })
               .then(() => {
-                // TODO: extract vars to .env
                 emailjs.send(
-                  'gmail',
-                  'template_cinu10s',
+                  process.env.EMAILJS_SERVICE_ID,
+                  process.env.EMAILJS_REGISTER_TEMPLATE_ID,
                   {
                     to_email: this.email,
                     to_name: this.fullName,
                   },
-                  'user_wDhdvZKngf0M0zmdElzxc'
+                  process.env.EMAILJS_USER_ID
                 )
               })
               .catch((error) => {
