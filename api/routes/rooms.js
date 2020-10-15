@@ -1,5 +1,4 @@
 const { Router } = require('express')
-// const config = require('../config.js')
 
 const router = Router()
 
@@ -9,10 +8,13 @@ const roomsController = require('../controllers/roomsController.js')
 // Create Room
 router.post('/room/create', roomsController.createRoom)
 
-// // Login
-// router.post('/user/login', usersController.login)
+// Toggle on_air
+// router.post('/user/toggle-on-air', usersController.login)
 
-// // Get User
-// router.get('/user/user', usersController.user)
+// Get Rooms
+router.get('/rooms', roomsController.getRooms)
+
+// Get Rooms On Air
+router.get('/rooms/on-air', roomsController.getRoomsOnAir)
 
 module.exports = router

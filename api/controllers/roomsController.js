@@ -109,23 +109,24 @@ module.exports.createRoom = [
 //   },
 // ]
 
-// // Get User
-// module.exports.user = (req, res) => {
-//   const token = req.headers.authorization
-//   if (token) {
-//     // verifies secret and checks if the token is expired
-//     jwt.verify(
-//       token.replace(/^Bearer\s/, ''),
-//       config.authSecret,
-//       (error, decoded) => {
-//         if (error) {
-//           return res.status(401).json({ message: 'unauthorized' })
-//         } else {
-//           return res.json({ user: decoded })
-//         }
-//       }
-//     )
-//   } else {
-//     return res.status(401).json({ message: 'unauthorized' })
-//   }
-// }
+// Get Rooms
+module.exports.getRooms = async (req, res) => {
+  // TODO: add status codes to response and add authentication to endpoint
+  try {
+    const rooms = await Room.find({})
+    return res.json({ rooms })
+  } catch (error) {
+    return res.json({ error })
+  }
+}
+
+// Get Rooms On Air
+module.exports.getRoomsOnAir = async (req, res) => {
+  // TODO: add status codes to response and add authentication to endpoint
+  try {
+    const rooms = await Room.find({ on_air: true })
+    return res.json({ rooms })
+  } catch (error) {
+    return res.json({ error })
+  }
+}

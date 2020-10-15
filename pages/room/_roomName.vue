@@ -53,7 +53,7 @@ export default {
 
   mounted() {
     // FIXME: add GUID to room table in mongo db so not to expose user id
-    this.socket.emit('JOIN_ROOM', { _id: this.$route.params.id })
+    this.socket.emit('JOIN_ROOM', { _id: this.$route.params.roomName })
 
     this.socket.on('MESSAGE', (data) => {
       this.messages = [...this.messages, data]

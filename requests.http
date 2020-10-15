@@ -15,7 +15,7 @@ POST http://localhost:3000/api/room/create HTTP/1.1
 content-type: application/json
 
 {
-    "room_name": "test",
+    "room_name": "test3",
     "on_air": true
 }
 
@@ -32,3 +32,11 @@ content-type: application/json
 GET http://localhost:3000/api/user/user HTTP/1.1
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjdkOGNhOGFhOWM2YzAyZDhiMzY5NzQiLCJlbWFpbCI6Im9zYW9zdG9ybUBnbWFpbC5jb20iLCJmdWxsX25hbWUiOiJvc2FvIHN0b3JtIiwiaWF0IjoxNjAyNDI4MDA1fQ.qKejolE0svNKkhyLfeXOkN6P68dmKFz8DE7PNTbHMQA
+
+### Read Rooms
+GET http://localhost:3000/api/rooms HTTP/1.1
+content-type: application/json
+
+### Read Rooms On Air
+GET http://localhost:3000/api/rooms/on-air HTTP/1.1
+content-type: application/json
