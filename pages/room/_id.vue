@@ -9,17 +9,13 @@
           </div>
 
           <!-- FIXME: add virtual scroller -->
-          <v-virtual-scroll height="300" item-height="20" :items="messages">
-            {{ messages[messages.length - 1] }}
-            <!-- {{ items }} -->
-            <!-- <div>
-              <div v-for="(msg, index) in messages" :key="index">
-                <p>
-                  <span>{{ msg.user }}: </span>{{ msg.message }}
-                </p>
-              </div>
-            </div> -->
-          </v-virtual-scroll>
+          <div ref="chat" class="chat">
+            <div v-for="(msg, index) in messages" :key="index">
+              <p>
+                <span>{{ msg.user }}: </span>{{ msg.message }}
+              </p>
+            </div>
+          </div>
         </div>
 
         <!-- TODO: only allow send message if there is text -->
@@ -49,16 +45,14 @@ export default {
     return {
       user: this.$auth.user.full_name,
       message: '',
-      messages: [''],
+      messages: [],
 
       socket: io('localhost:3000'),
     }
   },
 
-  computed: {
-    items() {
-      return this.messages[this.messages.lenth - 1]
-    },
+  updated() {
+    this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
   },
 
   mounted() {
@@ -82,3 +76,11 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.chat {
+  overflow-y: auto;
+  height: 50vh;
+  max-height: 50vh;
+}
+</style>
