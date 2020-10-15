@@ -82,7 +82,7 @@ export default {
     redirect: {
       login: '/', // User will be redirected to this path if login is required
       logout: '/', // User will be redirected to this path if after logout, current route is protected
-      home: '/home', // User will be redirect to this path after login if accessed login page directly
+      home: '/home', // User will be redirected to this path after login if accessed login page directly
     },
     rewriteRedirects: true,
   },

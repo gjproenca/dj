@@ -66,6 +66,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import emailjs from 'emailjs-com'
 
 export default {
   auth: 'guest',
@@ -112,7 +113,6 @@ export default {
         })
         .then((response) => {
           if (response.data._id) {
-            // TODO: change route to home
             this.$toast.success('Successfully registered', {
               icon: {
                 name: 'mdi-check',
@@ -126,6 +126,18 @@ export default {
                   email: this.email,
                   password: this.password,
                 },
+              })
+              .then(() => {
+                // TODO: extract vars to .env
+                emailjs.send(
+                  'gmail',
+                  'template_cinu10s',
+                  {
+                    to_email: this.email,
+                    to_name: this.fullName,
+                  },
+                  'user_wDhdvZKngf0M0zmdElzxc'
+                )
               })
               .catch((error) => {
                 console.log(error)
