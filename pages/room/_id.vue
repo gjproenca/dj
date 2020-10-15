@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO: extract chat component -->
     <v-card>
       <v-container>
         <div>
@@ -8,7 +9,6 @@
             <v-divider></v-divider>
           </div>
 
-          <!-- TODO: extract chat component -->
           <div v-chat-scroll="{ always: false, smooth: true }" class="chat">
             <div v-for="(msg, index) in messages" :key="index">
               <p>
@@ -18,15 +18,15 @@
           </div>
         </div>
 
-        <!-- TODO: only allow send message if there is text -->
         <div>
           <form @submit.prevent="sendMessage">
             <v-text-field
               v-model="message"
-              append-icon="mdi-send"
+              :append-icon="message.length > 0 ? 'mdi-send' : ''"
               label="Message"
               clear-icon="mdi-close-circle"
               clearable
+              autocomplete="off"
               @click:append="sendMessage"
             >
             </v-text-field>
@@ -50,10 +50,6 @@ export default {
       socket: io('localhost:3000'),
     }
   },
-
-  // updated() {
-  //   this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
-  // },
 
   mounted() {
     // FIXME: add GUID to room table in mongo db so not to expose user id
