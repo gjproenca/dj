@@ -8,8 +8,8 @@
             <v-divider></v-divider>
           </div>
 
-          <!-- FIXME: add virtual scroller -->
-          <div ref="chat" class="chat">
+          <!-- TODO: extract chat component -->
+          <div v-chat-scroll="{ always: false, smooth: true }" class="chat">
             <div v-for="(msg, index) in messages" :key="index">
               <p>
                 <span>{{ msg.user }}: </span>{{ msg.message }}
@@ -51,9 +51,9 @@ export default {
     }
   },
 
-  updated() {
-    this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
-  },
+  // updated() {
+  //   this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
+  // },
 
   mounted() {
     // FIXME: add GUID to room table in mongo db so not to expose user id
