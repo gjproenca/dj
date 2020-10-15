@@ -12,9 +12,7 @@ module.exports.register = [
   validator.body('email').custom((value) => {
     return User.findOne({ email: value }).then((user) => {
       if (user !== null) {
-        // FIXME: fix promise reject error
-        // eslint-disable-next-line prefer-promise-reject-errors
-        return Promise.reject('Email already in use')
+        return Promise.reject(new Error('Email already in use'))
       }
     })
   }),
