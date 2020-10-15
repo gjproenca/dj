@@ -10,7 +10,7 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 
 const db = mongoose.connection
 db.on('error', () => console.log(chalk.red('MongoDB Connection Error')))
-db.once('open', function callback() {
+db.once('open', () => {
   console.log(chalk.green('MongoDB Connected'))
 })
 

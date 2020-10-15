@@ -10,6 +10,15 @@ content-type: application/json
     "password": "osaostorm1@gmail.com"
 }
 
+### Create room
+POST http://localhost:3000/api/room/create HTTP/1.1
+content-type: application/json
+
+{
+    "room_name": "test",
+    "on_air": true
+}
+
 ### Login
 POST http://localhost:3000/api/user/login HTTP/1.1
 content-type: application/json
