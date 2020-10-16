@@ -1,6 +1,6 @@
 const express = require('express')
-// const db = require('./db.js')
-// const config = require('./config.js')
+require('./db.js') // import DB
+
 // Require & Import API routes
 const users = require('./routes/users.js')
 const rooms = require('./routes/rooms.js')

@@ -1,6 +1,6 @@
 # Needs vscode REST Client extension to send the requests in this file
 
-### Register
+### Create User
 POST http://localhost:3000/api/user/register HTTP/1.1
 content-type: application/json
 
@@ -10,7 +10,7 @@ content-type: application/json
     "password": "osaostorm1@gmail.com"
 }
 
-### Create room
+### Create Room
 POST http://localhost:3000/api/room/create HTTP/1.1
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjdkOGNhOGFhOWM2YzAyZDhiMzY5NzQiLCJlbWFpbCI6Im9zYW9zdG9ybUBnbWFpbC5jb20iLCJmdWxsX25hbWUiOiJvc2FvIHN0b3JtIiwiaWF0IjoxNjAyNDI4MDA1fQ.qKejolE0svNKkhyLfeXOkN6P68dmKFz8DE7PNTbHMQA

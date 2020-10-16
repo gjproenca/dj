@@ -6,7 +6,7 @@ const config = {
 
 module.exports = config
 
-// Check if user logged in
+// Check if user is logged in
 module.exports.isAuthenticated = (req, res, next) => {
   const token = req.headers.authorization
   if (token) {
