@@ -44,87 +44,22 @@ module.exports.createRoom = [
   },
 ]
 
-// // Login
-// module.exports.login = [
-//   // validation rules
-//   validator.body('email', 'Please enter Email').isLength({ min: 1 }),
-//   validator.body('password', 'Please enter Password').isLength({ min: 1 }),
-
-//   (req, res) => {
-//     // throw validation errors
-//     const errors = validator.validationResult(req)
-//     if (!errors.isEmpty()) {
-//       return res.status(422).json({ errors: errors.mapped() })
-//     }
-
-//     // validate email and password are correct
-//     User.findOne({ email: req.body.email }, (error, user) => {
-//       if (error) {
-//         return res.status(500).json({
-//           message: 'Error logging in',
-//           error,
-//         })
-//       }
-
-//       if (user === null) {
-//         return res.status(500).json({
-//           message: 'Email not found',
-//         })
-//       }
-
-//       // compare submitted password with password inside db
-//       return bcrypt.compare(
-//         req.body.password,
-//         user.password,
-//         (error, isMatched) => {
-//           if (error) {
-//             return res.status(500).json({
-//               message: 'Error logging in',
-//               error,
-//             })
-//           }
-
-//           if (isMatched === true) {
-//             return res.json({
-//               user: {
-//                 _id: user._id,
-//                 email: user.email,
-//                 full_name: user.full_name,
-//               },
-//               token: jwt.sign(
-//                 { _id: user._id, email: user.email, full_name: user.full_name },
-//                 config.authSecret
-//               ), // generate JWT token here
-//             })
-//           } else {
-//             return res.status(500).json({
-//               message: 'Invalid Email or Password',
-//             })
-//           }
-//         }
-//       )
-//     })
-//   },
-// ]
-
 // Get Rooms
 module.exports.getRooms = async (req, res) => {
-  // TODO: add status codes to response and add authentication to endpoint
   try {
     const rooms = await Room.find({})
-    return res.json({ rooms })
+    return res.status(200).json({ rooms })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 }
 
 // Get Rooms On Air
 module.exports.getRoomsOnAir = async (req, res) => {
-  // TODO: add status codes to response and add authentication to endpoint
   try {
     const rooms = await Room.find({ on_air: true })
-    return res.json({ rooms })
+    return res.status(200).json({ rooms })
   } catch (error) {
-    return res.json({ error })
+    return res.status(500).json({ error })
   }
 }
