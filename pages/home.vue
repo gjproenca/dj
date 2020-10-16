@@ -18,7 +18,7 @@
 export default {
   async asyncData({ $axios, $auth }) {
     const { data } = await $axios.get(
-      'http://localhost:3000/api/rooms/on-air',
+      `${$axios.defaults.baseURL}/api/rooms/on-air`,
       {
         headers: {
           Authorization: $auth.getToken('local'),

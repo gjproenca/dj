@@ -106,7 +106,7 @@ export default {
 
     register() {
       this.$axios
-        .post('/api/user/register', {
+        .post(`${this.$axios.defaults.baseURL}/api/user/register`, {
           full_name: this.fullName,
           email: this.email,
           password: this.password,
