@@ -15,11 +15,16 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
-  async asyncData() {
-    const { data } = await axios.get('http://localhost:3000/api/rooms/on-air')
+  async asyncData({ $axios, $auth }) {
+    const { data } = await $axios.get(
+      'http://localhost:3000/api/rooms/on-air',
+      {
+        headers: {
+          Authorization: $auth.getToken('local'),
+        },
+      }
+    )
     return { rooms: data.rooms }
   },
 
