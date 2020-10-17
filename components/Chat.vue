@@ -37,16 +37,19 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
-
 export default {
+  props: {
+    socket: {
+      type: Object,
+      required: true,
+    },
+  },
+
   data() {
     return {
       user: this.$auth.user.full_name,
       message: '',
       messages: [],
-
-      socket: io('localhost:3000'),
     }
   },
 
