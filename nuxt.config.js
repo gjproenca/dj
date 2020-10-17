@@ -1,5 +1,4 @@
 import colors from 'vuetify/es5/util/colors'
-// import './assets/toast.scss'
 require('dotenv').config()
 
 export default {
