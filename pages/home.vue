@@ -4,10 +4,8 @@
 
     <div v-for="(room, index) in rooms" :key="index">
       <n-link :to="'/room/' + room.room_name" class="link">
-        <v-btn>Join Room</v-btn>
+        <v-btn elevation="0">Join Room {{ room.room_name }}</v-btn>
       </n-link>
-
-      Room name: {{ room.room_name }}
 
       <v-divider class="mt-3 mb-3" />
     </div>

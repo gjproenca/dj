@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn v-if="this.$auth.loggedIn" @click="logout">Logout</v-btn>
+    <v-btn elevation="0" color="secondary" @click="logout">Logout</v-btn>
   </div>
 </template>
 
