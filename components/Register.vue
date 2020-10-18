@@ -51,9 +51,7 @@
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn elevation="0" type="submit" :disabled="!isValidForm"
-              >Register</v-btn
-            >
+            <v-btn type="submit" :disabled="!isValidForm">Register</v-btn>
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>

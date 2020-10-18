@@ -1,7 +1,14 @@
 <template>
   <v-app>
     <v-main>
-      <v-app-bar v-if="this.$auth.loggedIn" elevation="0">
+      <v-app-bar v-if="this.$auth.loggedIn">
+        <n-link
+          v-if="this.$route.path !== '/home'"
+          to="/home"
+          style="text-decoration: none"
+        >
+          <v-btn color="secondary">Home</v-btn>
+        </n-link>
         <v-spacer />
         <Logout />
       </v-app-bar>
