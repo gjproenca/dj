@@ -12,7 +12,7 @@
             v-chat-scroll="{ always: false, smooth: true }"
             :items="messages"
             :bench="3"
-            height="200"
+            height="390"
             item-height="30"
           >
             <template v-slot="{ item }">
