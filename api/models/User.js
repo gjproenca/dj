@@ -7,7 +7,7 @@ const User = new Schema(
     email: { type: String, required: true, index: { unique: true } },
     password: { type: String, required: true },
     // TODO: create activate account trough email and endpoint logic
-    active: { type: Boolean, default: false },
+    active: { type: Boolean, default: true },
   },
   { timestamps: true }
 )

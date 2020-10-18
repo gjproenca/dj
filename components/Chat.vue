@@ -8,13 +8,23 @@
             <v-divider></v-divider>
           </div>
 
-          <div v-chat-scroll="{ always: false, smooth: true }" class="chat">
-            <div v-for="(msg, index) in messages" :key="index">
-              <p>
-                <span>{{ msg.user }}: </span>{{ msg.message }}
-              </p>
-            </div>
-          </div>
+          <v-virtual-scroll
+            v-chat-scroll="{ always: false, smooth: true }"
+            :items="messages"
+            :bench="3"
+            height="200"
+            item-height="20"
+          >
+            <template v-slot="{ item }">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ item.user }}: {{ item.message }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+          </v-virtual-scroll>
         </div>
 
         <div>
@@ -74,9 +84,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.chat {
-  overflow-y: auto;
-  height: 50vh;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -38,8 +38,6 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    // Check https://github.com/nuxt-community/proxy-module
-    '@nuxtjs/proxy',
     // enables Nuxt Auth module
     '@nuxtjs/auth',
     '@nuxtjs/toast',
@@ -52,13 +50,7 @@ export default {
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: process.env.AXIOS_BASE_URL,
-    // proxy: true,
   },
-
-  // Check https://github.com/nuxt-community/proxy-module
-  // proxy: {
-  //   'http://localhost:3000/room/room1': 'https://www.youtube.com/',
-  // },
 
   toast: {
     iconPack: 'mdi',

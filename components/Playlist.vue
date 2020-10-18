@@ -2,10 +2,16 @@
   <div>
     <h3>Playlist</h3>
     <v-text-field v-model="playlistId" label="Playlist Id"></v-text-field>
-    <!-- FIXME: fix this and remove proxy -->
-    <v-virtual-scroll :items="item" height="100" item-height="20">
+
+    <!-- FIXME: fix this -->
+    <v-virtual-scroll
+      :items="playlistItems"
+      :bench="3"
+      height="100"
+      item-height="20"
+    >
       <template v-slot="{ item }">
-        <v-list-item :key="item">
+        <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
               {{ item }}
@@ -14,6 +20,7 @@
         </v-list-item>
       </template>
     </v-virtual-scroll>
+
     <v-btn @click="loadPlaylist">Load Playlist</v-btn>
   </div>
 </template>
@@ -23,7 +30,7 @@ export default {
   data() {
     return {
       playlistId: '',
-      item: ['asd', 'asd', 'asd', 'asd'],
+      playlistItems: [],
     }
   },
 
@@ -36,8 +43,8 @@ export default {
       )
         .then((response) => response.json())
         .then((data) => {
-          this.item = data.items
-          console.log(data)
+          this.playlistItems = data.items
+          console.log(data.items)
         })
 
       // FIXME: axios not workingonly fetch
