@@ -13,7 +13,7 @@
             :items="messages"
             :bench="3"
             height="200"
-            item-height="20"
+            item-height="30"
           >
             <template v-slot="{ item }">
               <v-list-item>

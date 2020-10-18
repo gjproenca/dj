@@ -3,18 +3,22 @@
     <h3>Playlist</h3>
     <v-text-field v-model="playlistId" label="Playlist Id"></v-text-field>
 
-    <!-- FIXME: fix this -->
     <v-virtual-scroll
+      v-chat-scroll="{ always: false, smooth: true }"
       :items="playlistItems"
       :bench="3"
-      height="100"
-      item-height="20"
+      height="150"
+      item-height="50"
     >
       <template v-slot="{ item }">
         <v-list-item>
+          <v-list-item-avatar>
+            <v-img :src="item.snippet.thumbnails.default.url"></v-img>
+          </v-list-item-avatar>
+
           <v-list-item-content>
             <v-list-item-title>
-              {{ item }}
+              {{ item.snippet.position + 1 }} - {{ item.snippet.title }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -44,7 +48,6 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.playlistItems = data.items
-          console.log(data.items)
         })
 
       // FIXME: axios not workingonly fetch
@@ -56,4 +59,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.playlist-items {
+  height: 30vh;
+  overflow-y: auto;
+}
+</style>
