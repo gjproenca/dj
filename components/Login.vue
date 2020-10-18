@@ -33,7 +33,6 @@
               >Login</v-btn
             >
           </v-col>
-          <v-col class="d-flex justify-center" cols="12"><Logout /></v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>
               Don't have an account? <a @click="toggleShowLogin">Register</a>
@@ -47,13 +46,8 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import Logout from './Logout.vue'
 
 export default {
-  components: {
-    Logout,
-  },
-
   auth: 'guest',
 
   data() {
