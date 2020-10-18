@@ -52,13 +52,13 @@ export default {
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: process.env.AXIOS_BASE_URL,
-    proxy: false,
+    // proxy: true,
   },
 
   // Check https://github.com/nuxt-community/proxy-module
   // proxy: {
-  //   '/room/': 'https://www.youtube.com/',
-  // }
+  //   'http://localhost:3000/room/room1': 'https://www.youtube.com/',
+  // },
 
   toast: {
     iconPack: 'mdi',
