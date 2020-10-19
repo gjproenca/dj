@@ -16,7 +16,7 @@ content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjdkOGNhOGFhOWM2YzAyZDhiMzY5NzQiLCJlbWFpbCI6Im9zYW9zdG9ybUBnbWFpbC5jb20iLCJmdWxsX25hbWUiOiJvc2FvIHN0b3JtIiwiaWF0IjoxNjAyNDI4MDA1fQ.qKejolE0svNKkhyLfeXOkN6P68dmKFz8DE7PNTbHMQA
 
 {
-    "room_name": "test4",
+    "room_name": "test64",
     "created_by": "5f7d8ca8aa9c6c02d8b36974",
     "on_air": true
 }

@@ -19,22 +19,20 @@ export default {
 
   methods: {
     async createRoom() {
-      const user = await this.$axios.get(
-        'http://localhost:3000/api/user/user',
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjdkOGNhOGFhOWM2YzAyZDhiMzY5NzQiLCJlbWFpbCI6Im9zYW9zdG9ybUBnbWFpbC5jb20iLCJmdWxsX25hbWUiOiJvc2FvIHN0b3JtIiwiaWF0IjoxNjAyNDI4MDA1fQ.qKejolE0svNKkhyLfeXOkN6P68dmKFz8DE7PNTbHMQA',
-          },
-        }
-      )
+      try {
+        const user = await this.$axios.get(
+          'http://localhost:3000/api/user/user',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: this.$auth.getToken('local'),
+            },
+          }
+        )
 
-      const id = new mongoose.Types.ObjectId(user.data.user._id)
+        const id = new mongoose.Types.ObjectId(user.data.user._id)
 
-      const createRoom = await this.$axios.post(
-        'http://localhost:3000/api/room/create',
-        {
+        await this.$axios.post('http://localhost:3000/api/room/create', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: this.$auth.getToken('local'),
@@ -42,12 +40,26 @@ export default {
           room_name: this.roomName,
           created_by: id,
           on_air: true,
+        })
+
+        this.$toast.success('Room created', {
+          icon: {
+            name: 'mdi-check',
+          },
+        })
+
+        this.$nuxt.refresh()
+      } catch (error) {
+        if (error.response.data.errors) {
+          for (const key in error.response.data.errors) {
+            this.$toast.error(error.response.data.errors[key].msg, {
+              icon: {
+                name: 'mdi-alert',
+              },
+            })
+          }
         }
-      )
-
-      console.log(createRoom)
-
-      //   this.$nuxt.refresh()
+      }
     },
   },
 }

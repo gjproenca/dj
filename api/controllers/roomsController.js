@@ -11,10 +11,10 @@ module.exports.createRoom = [
   validator
     .body('created_by', 'Please enter Created By (ObjectId)')
     .isLength({ min: 1 }),
-  validator.body('email').custom((value) => {
+  validator.body('room_name').custom((value) => {
     return Room.findOne({ room_name: value }).then((room) => {
       if (room !== null) {
-        return Promise.reject(new Error('Room Name already in use'))
+        return Promise.reject(new Error('Room name exists'))
       }
     })
   }),
