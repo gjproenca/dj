@@ -1,4 +1,5 @@
 const validator = require('express-validator')
+// const mongoose = require('mongoose')
 const Room = require('../models/Room.js')
 
 // Create Room
@@ -6,6 +7,9 @@ module.exports.createRoom = [
   // validation rules
   validator
     .body('room_name', 'Please enter the Room Name')
+    .isLength({ min: 1 }),
+  validator
+    .body('created_by', 'Please enter Created By (ObjectId)')
     .isLength({ min: 1 }),
   validator.body('email').custom((value) => {
     return Room.findOne({ room_name: value }).then((room) => {
@@ -25,6 +29,7 @@ module.exports.createRoom = [
     // initialize record
     const room = new Room({
       room_name: req.body.room_name,
+      created_by: req.body.created_by,
       on_air: req.body.on_air,
     })
 
