@@ -16,8 +16,8 @@
 
 <script>
 import io from 'socket.io-client'
-import Chat from '../../components/Chat.vue'
-import Playlist from '../../components/Playlist.vue'
+import Chat from '@/components/Chat.vue'
+import Playlist from '@/components/Playlist.vue'
 
 export default {
   components: {
