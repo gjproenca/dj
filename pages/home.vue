@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1>Home</h1>
+    <CreateRoom />
+
+    <h1>Rooms</h1>
 
     <div v-for="(room, index) in rooms" :key="index">
       <n-link :to="'/room/' + room.room_name" class="link">
@@ -9,8 +11,6 @@
 
       <v-divider class="mt-3 mb-3" />
     </div>
-
-    <CreateRoom />
   </div>
 </template>
 

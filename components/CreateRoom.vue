@@ -2,8 +2,16 @@
   <div>
     <h1>Create Room</h1>
 
-    <v-text-field v-model="roomName" label="Room Name"></v-text-field>
-    <v-btn @click="createRoom">Create Room</v-btn>
+    <v-form @submit.prevent="createRoom">
+      <v-text-field
+        v-model="roomName"
+        label="Room name"
+        :append-icon="roomName ? 'mdi-send' : ''"
+        clear-icon="mdi-close-circle"
+        clearable
+        @click:append="createRoom"
+      ></v-text-field>
+    </v-form>
   </div>
 </template>
 
@@ -13,7 +21,7 @@ const mongoose = require('mongoose')
 export default {
   data() {
     return {
-      roomName: undefined,
+      roomName: '',
     }
   },
 
@@ -47,6 +55,8 @@ export default {
             name: 'mdi-check',
           },
         })
+
+        this.roomName = ''
 
         this.$nuxt.refresh()
       } catch (error) {

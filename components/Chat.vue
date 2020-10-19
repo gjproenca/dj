@@ -31,7 +31,7 @@
           <form @submit.prevent="sendMessage">
             <v-text-field
               v-model="message"
-              :append-icon="message.length > 0 ? 'mdi-send' : ''"
+              :append-icon="message ? 'mdi-send' : ''"
               label="Message"
               clear-icon="mdi-close-circle"
               clearable
