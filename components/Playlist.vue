@@ -77,11 +77,6 @@ export default {
           this.playlistItems = data.items
           console.log(data.items)
         })
-
-      // FIXME: axios not workingonly fetch
-      //   this.playlistItems = await this.$axios.get(
-      //     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLH69W7vrLQqZuiM2YbS8prU7ddDWZuM7U&key=${process.env.YOUTUBE_API_KEY}`
-      //   )
     },
 
     setIframeSrc($event) {

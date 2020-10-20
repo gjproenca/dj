@@ -49,22 +49,32 @@ module.exports.createRoom = [
   },
 ]
 
-// Get Rooms
-module.exports.getRooms = async (req, res) => {
+// Read Room
+module.exports.readRoom = async (req, res) => {
   try {
-    const rooms = await Room.find({})
-    return res.status(200).json({ rooms })
+    const room = await Room.findOne({ room_name: req.body.room_name }).orFail()
+    return res.status(200).json({ room })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: error.message })
   }
 }
 
-// Get Rooms On Air
-module.exports.getRoomsOnAir = async (req, res) => {
+// Read Rooms
+module.exports.readRooms = async (req, res) => {
   try {
-    const rooms = await Room.find({ on_air: true })
+    const rooms = await Room.find({}).orFail()
     return res.status(200).json({ rooms })
   } catch (error) {
-    return res.status(500).json({ error })
+    return res.status(500).json({ error: error.message })
+  }
+}
+
+// Read Rooms On Air
+module.exports.readRoomsOnAir = async (req, res) => {
+  try {
+    const rooms = await Room.find({ on_air: true }).orFail()
+    return res.status(200).json({ rooms })
+  } catch (error) {
+    return res.status(500).json({ error: error.message })
   }
 }

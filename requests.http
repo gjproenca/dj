@@ -16,7 +16,7 @@ content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjdkOGNhOGFhOWM2YzAyZDhiMzY5NzQiLCJlbWFpbCI6Im9zYW9zdG9ybUBnbWFpbC5jb20iLCJmdWxsX25hbWUiOiJvc2FvIHN0b3JtIiwiaWF0IjoxNjAyNDI4MDA1fQ.qKejolE0svNKkhyLfeXOkN6P68dmKFz8DE7PNTbHMQA
 
 {
-    "room_name": "test64",
+    "room_name": "test1",
     "created_by": "5f7d8ca8aa9c6c02d8b36974",
     "on_air": true
 }
@@ -30,10 +30,14 @@ content-type: application/json
     "password": "osaostorm@gmail.com"
 }
 
-### Read User
-GET http://localhost:3000/api/user/user HTTP/1.1
-content-type: application/json
+### Read Room
+GET http://localhost:3000/api/room HTTP/1.1
+Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjdkOGNhOGFhOWM2YzAyZDhiMzY5NzQiLCJlbWFpbCI6Im9zYW9zdG9ybUBnbWFpbC5jb20iLCJmdWxsX25hbWUiOiJvc2FvIHN0b3JtIiwiaWF0IjoxNjAyNDI4MDA1fQ.qKejolE0svNKkhyLfeXOkN6P68dmKFz8DE7PNTbHMQA
+
+{
+    "room_name": "test"
+}
 
 ### Read Rooms
 GET http://localhost:3000/api/rooms HTTP/1.1

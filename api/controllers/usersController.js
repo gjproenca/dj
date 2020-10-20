@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs')
 const config = require('../config.js')
 const User = require('../models/User.js')
 
-// Register
-module.exports.register = [
+// Create User
+module.exports.createUser = [
   // validations rules
   validator.body('full_name', 'Please enter Full Name').isLength({ min: 1 }),
   validator.body('email', 'Please enter Email').isLength({ min: 1 }),
@@ -116,8 +116,8 @@ module.exports.login = [
   },
 ]
 
-// Get User
-module.exports.user = (req, res) => {
+// Read User
+module.exports.readUser = (req, res) => {
   const token = req.headers.authorization
   if (token) {
     // verifies secret and checks if the token is expired
