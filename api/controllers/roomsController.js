@@ -30,7 +30,7 @@ module.exports.createRoom = [
     const room = new Room({
       room_name: req.body.room_name,
       created_by: req.body.created_by,
-      on_air: req.body.on_air,
+      live: req.body.live,
     })
 
     // save record
@@ -62,7 +62,7 @@ module.exports.readRoom = async (req, res) => {
 // Read Rooms
 module.exports.readRooms = async (req, res) => {
   try {
-    const rooms = await Room.find({}).orFail()
+    const rooms = await Room.find({}).orFail(new Error('No rooms found!'))
     return res.status(200).json({ rooms })
   } catch (error) {
     return res.status(500).json({ error: error.message })
@@ -72,7 +72,9 @@ module.exports.readRooms = async (req, res) => {
 // Read Rooms On Air
 module.exports.readRoomsOnAir = async (req, res) => {
   try {
-    const rooms = await Room.find({ on_air: true }).orFail()
+    const rooms = await Room.find({ live: true }).orFail(
+      new Error('No rooms live!')
+    )
     return res.status(200).json({ rooms })
   } catch (error) {
     return res.status(500).json({ error: error.message })

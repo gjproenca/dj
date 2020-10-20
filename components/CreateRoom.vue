@@ -28,26 +28,23 @@ export default {
   methods: {
     async createRoom() {
       try {
-        const user = await this.$axios.get(
-          'http://localhost:3000/api/user/user',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: this.$auth.getToken('local'),
-            },
-          }
-        )
+        const user = await this.$axios.get('http://localhost:3000/api/user', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: this.$auth.getToken('local'),
+          },
+        })
 
         const id = new mongoose.Types.ObjectId(user.data.user._id)
 
-        await this.$axios.post('http://localhost:3000/api/room/create', {
+        await this.$axios.post('http://localhost:3000/api/room', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: this.$auth.getToken('local'),
           },
           room_name: this.roomName,
           created_by: id,
-          on_air: true,
+          live: true,
         })
 
         this.$toast.success('Room created', {

@@ -1,6 +1,8 @@
 <template>
   <div>
-    {{ test1 }}
+    <!-- TODO: remove next line -->
+    {{ user }}
+
     <v-row fill-height fluid>
       <v-col cols="5">
         <Playlist />
@@ -27,7 +29,7 @@ export default {
   },
 
   async asyncData({ $axios, $auth }) {
-    const user = await fetch(`${$axios.defaults.baseURL}/api/user/user`, {
+    const user = await fetch(`${$axios.defaults.baseURL}/api/user`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -37,13 +39,12 @@ export default {
 
     const userJson = await user.json()
 
-    console.log('user')
-    return { test1: userJson }
+    return { user: userJson }
   },
 
   data() {
     return {
-      test1: ';',
+      user: '',
       socket: io(this.$axios.defaults.baseURL),
     }
   },

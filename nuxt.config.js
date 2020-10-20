@@ -71,7 +71,7 @@ export default {
           },
           logout: true,
           user: {
-            url: '/api/user/user',
+            url: '/api/user',
             method: 'get',
             propertyName: 'user',
           },

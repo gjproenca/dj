@@ -7,7 +7,7 @@ const router = Router()
 const roomsController = require('../controllers/roomsController.js')
 
 // Create Room
-router.post('/room/create', config.isAuthenticated, roomsController.createRoom)
+router.post('/room', config.isAuthenticated, roomsController.createRoom)
 
 // Read Room
 router.get('/room', config.isAuthenticated, roomsController.readRoom)
@@ -17,7 +17,7 @@ router.get('/rooms', config.isAuthenticated, roomsController.readRooms)
 
 // Read Rooms On Air
 router.get(
-  '/rooms/on-air',
+  '/rooms/live',
   config.isAuthenticated,
   roomsController.readRoomsOnAir
 )
