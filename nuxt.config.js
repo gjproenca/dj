@@ -1,9 +1,16 @@
 import colors from 'vuetify/es5/util/colors'
+require('dotenv').config()
 
 export default {
+  env: {
+    WS_URL: process.env.WS_URL || 'http://localhost:3000',
+  },
+
+  serverMiddleware: ['@/api/index.js'],
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - dj',
+    titleTemplate: '%s | dj',
     title: 'dj',
     meta: [
       { charset: 'utf-8' },
@@ -17,7 +24,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: ['@/plugins/vue-chat-scroll.js'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -30,16 +37,55 @@ export default {
     '@nuxtjs/stylelint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/dotenv',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: [],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth', '~/io'],
+
+  router: {
+    middleware: ['auth'],
+  },
+
+  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
+  axios: {
+    baseURL: process.env.AXIOS_BASE_URL,
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          // these are the API endpoints created in Express
+          login: {
+            url: '/api/user/login',
+            method: 'post',
+            propertyName: 'token',
+          },
+          logout: true,
+          user: {
+            url: '/api/user',
+            method: 'get',
+            propertyName: 'user',
+          },
+        },
+        tokenRequired: true,
+        tokenType: 'Bearer',
+      },
+    },
+    redirect: {
+      login: '/', // User will be redirected to this path if login is required
+      logout: '/', // User will be redirected to this path if after logout, current route is protected
+      home: '/home', // User will be redirected to this path after login if accessed login page directly
+    },
+    rewriteRedirects: true,
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
