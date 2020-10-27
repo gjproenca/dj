@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar v-if="this.$auth.loggedIn" app>
+    <v-app-bar v-if="loggedIn" app>
       <div v-for="(button, index) in buttons" :key="index">
         <component :is="button"></component>
       </div>
@@ -33,8 +33,13 @@ export default {
   },
   data() {
     return {
+      loggedIn: false,
       buttons: [ButtonHome, ButtonLogout],
     }
+  },
+
+  beforeMount() {
+    this.loggedIn = this.$auth.loggedIn
   },
 }
 </script>
