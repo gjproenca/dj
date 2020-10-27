@@ -15,14 +15,17 @@ export default function () {
     this.nuxt.hook('close', () => new Promise(server.close))
 
     // Add socket.io events
-    const messages = []
-    io.on('connection', (socket) => {
-      socket.on('last-messages', function (fn) {
-        fn(messages.slice(-50))
+    io.on('connect', (socket) => {
+      console.log('socket id', socket.id)
+      let roomId
+
+      socket.on('join-room', (room) => {
+        roomId = room.roomId
+        socket.join(roomId)
       })
-      socket.on('send-message', function (message) {
-        messages.push(message)
-        socket.broadcast.emit('new-message', message)
+
+      socket.on('send-message', (message) => {
+        io.to(roomId).emit('new-message', message)
       })
     })
   })

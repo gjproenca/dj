@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
 import Chat from '@/components/Chat.vue'
 import Playlist from '@/components/Playlist.vue'
+import socket from '@/plugins/socket.io.js'
 
 export default {
   components: {
@@ -28,8 +28,8 @@ export default {
     Playlist,
   },
 
-  async asyncData({ $axios, $auth }) {
-    const user = await fetch(`${$axios.defaults.baseURL}/api/user`, {
+  async asyncData({ $auth }) {
+    const user = await fetch(`${process.env.BASE_URL}/api/user`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -45,8 +45,12 @@ export default {
   data() {
     return {
       user: '',
-      socket: io(this.$axios.defaults.baseURL),
+      socket: {},
     }
+  },
+
+  beforeMount() {
+    this.socket = socket
   },
 }
 </script>

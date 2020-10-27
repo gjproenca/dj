@@ -30,7 +30,7 @@ export default {
   async asyncData({ $axios, $auth }) {
     try {
       const { data } = await $axios.get(
-        `${$axios.defaults.baseURL}/api/rooms/live`,
+        `${process.env.BASE_URL}/api/rooms/live`,
         {
           headers: {
             Authorization: $auth.getToken('local'),

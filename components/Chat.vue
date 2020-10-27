@@ -19,7 +19,7 @@
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title>
-                    {{ item.user }}: {{ item.message }}
+                    {{ item.user }}: {{ item.text }}
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -57,28 +57,30 @@ export default {
 
   data() {
     return {
-      user: this.$auth.user.full_name,
       message: '',
       messages: [],
     }
   },
 
-  mounted() {
-    this.socket.emit('JOIN_ROOM', { _id: this.$route.params.roomName })
+  beforeMount() {
+    this.socket.emit('join-room', { roomId: this.$route.params.roomName })
 
-    this.socket.on('MESSAGE', (data) => {
-      this.messages = [...this.messages, data]
+    this.socket.on('new-message', (message) => {
+      this.messages.push(message)
     })
   },
 
   methods: {
     sendMessage() {
-      this.socket.emit('SEND_MESSAGE', {
-        user: this.user,
-        message: this.message,
-      })
-
+      if (!this.message.trim()) {
+        return
+      }
+      const message = {
+        user: this.$auth.user.full_name,
+        text: this.message.trim(),
+      }
       this.message = ''
+      this.socket.emit('send-message', message)
     },
   },
 }
