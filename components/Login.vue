@@ -85,14 +85,14 @@ export default {
         //   },
         // })
       } catch (error) {
-        if (error.response.data.message) {
-          console.log(error.response.data.message)
-          // this.$toast.error(error.response.data.message, {
-          //   icon: {
-          //     name: 'mdi-alert',
-          //   },
-          // })
-        }
+        // if (error.response.data.message) {
+        // console.log(error.response.data.message)
+        // this.$toast.error(error.response.data.message, {
+        //   icon: {
+        //     name: 'mdi-alert',
+        //   },
+        // })
+        // }
       }
     },
   },

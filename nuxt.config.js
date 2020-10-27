@@ -3,7 +3,7 @@ require('dotenv').config()
 
 export default {
   env: {
-    WS_URL: process.env.WS_URL || 'http://localhost:3000',
+    WS_URL: process.env.WS_URL || process.env.BASE_URL,
   },
 
   serverMiddleware: ['@/api/index.js'],
@@ -45,6 +45,11 @@ export default {
 
   router: {
     middleware: ['auth'],
+  },
+
+  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
+  axios: {
+    baseURL: process.env.BASE_URL,
   },
 
   auth: {

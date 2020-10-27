@@ -1,7 +1,9 @@
 <template>
   <div>
     <!-- TODO: remove next line -->
-    {{ user }}
+    <client-only placeholder="Loading...">
+      {{ user }}
+    </client-only>
 
     <v-row fill-height fluid>
       <v-col cols="5">
@@ -29,17 +31,21 @@ export default {
   },
 
   async asyncData({ $auth }) {
-    const user = await fetch(`${process.env.BASE_URL}/api/user`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: $auth.getToken('local'),
-      },
-    })
+    try {
+      const request = await fetch(`${process.env.BASE_URL}/api/user`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: $auth.getToken('local'),
+        },
+      })
 
-    const userJson = await user.json()
+      const user = await request.json()
 
-    return { user: userJson }
+      return { user }
+    } catch (error) {
+      console.log(error)
+    }
   },
 
   data() {

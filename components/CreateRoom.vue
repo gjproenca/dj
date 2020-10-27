@@ -28,7 +28,7 @@ export default {
   methods: {
     async createRoom() {
       try {
-        const user = await this.$axios.get('http://localhost:3000/api/user', {
+        const user = await this.$axios.get(`${process.env.BASE_URL}/api/user`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: this.$auth.getToken('local'),
@@ -37,7 +37,7 @@ export default {
 
         const id = new mongoose.Types.ObjectId(user.data.user._id)
 
-        await this.$axios.post('http://localhost:3000/api/room', {
+        await this.$axios.post(`${process.env.BASE_URL}/api/room`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: this.$auth.getToken('local'),
