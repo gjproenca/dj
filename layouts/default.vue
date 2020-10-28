@@ -31,6 +31,7 @@ export default {
     ButtonHome,
     ButtonLogout,
   },
+
   data() {
     return {
       loggedIn: false,
@@ -39,12 +40,12 @@ export default {
   },
 
   created() {
+    // Initialize loggedIn to false then either assign it
+    // a value in created for running the website or
+    // assign it a value in beforeMount for the test environment
+    // Note: mounted() works for both but loads slowly while running live
+    // Note: can only run one command at a single time ex: npm run dev or npm run test
     if (!process.env.TEST) {
-      // Initialize loggedIn to false then either assign it
-      // a value in created for running the website or
-      // assign it a value in beforeMount for the test environment
-      // Note: mounted() works for both but loads slowly while running live
-      // Note: can only run one command at a single time ex: npm run dev or npm run test
       this.loggedIn = this.$auth.loggedIn
     }
   },

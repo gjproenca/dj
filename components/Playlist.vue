@@ -68,14 +68,22 @@ export default {
   },
 
   methods: {
-    loadPlaylist() {
-      fetch(
-        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLH69W7vrLQqZuiM2YbS8prU7ddDWZuM7U&key=${process.env.YOUTUBE_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          this.playlistItems = data.items
-        })
+    async loadPlaylist() {
+      try {
+        const request = await fetch(
+          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLH69W7vrLQqZuiM2YbS8prU7ddDWZuM7U&key=${process.env.YOUTUBE_API_KEY}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        const { items } = await request.json()
+        this.playlistItems = items
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     setIframeSrc($event) {

@@ -28,23 +28,29 @@ export default {
   methods: {
     async createRoom() {
       try {
-        const user = await this.$axios.get(`${process.env.BASE_URL}/api/user`, {
+        const request = await fetch(`${process.env.BASE_URL}/api/user`, {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             Authorization: this.$auth.getToken('local'),
           },
         })
 
-        const id = new mongoose.Types.ObjectId(user.data.user._id)
+        const { user } = await request.json()
 
-        await this.$axios.post(`${process.env.BASE_URL}/api/room`, {
+        const id = new mongoose.Types.ObjectId(user._id)
+
+        await fetch(`${process.env.BASE_URL}/api/room`, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: this.$auth.getToken('local'),
           },
-          room_name: this.roomName,
-          created_by: id,
-          live: true,
+          body: JSON.stringify({
+            room_name: this.roomName,
+            created_by: id,
+            live: true,
+          }),
         })
 
         // this.$toast.success('Room created', {
@@ -65,6 +71,7 @@ export default {
           //   },
           // })
           // }
+          console.log(error.response.data.errors)
         }
       }
     },

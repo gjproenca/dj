@@ -104,56 +104,60 @@ export default {
   methods: {
     ...mapMutations({ toggleShowLogin: 'loginRegister/toggleShowLogin' }),
 
-    register() {
-      this.$axios
-        .post(`${process.env.BASE_URL}/api/user`, {
-          full_name: this.fullName,
-          email: this.email,
-          password: this.password,
+    async register() {
+      try {
+        const request = await fetch(`${process.env.BASE_URL}/api/user`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            full_name: this.fullName,
+            email: this.email,
+            password: this.password,
+          }),
         })
-        .then((response) => {
-          if (response.data._id) {
-            // this.$toast.success('Successfully registered', {
-            //   icon: {
-            //     name: 'mdi-check',
-            //   },
-            // })
 
-            // log in if successfully registered
-            this.$auth
-              .loginWith('local', {
-                data: {
-                  email: this.email,
-                  password: this.password,
-                },
-              })
-              .then(() => {
-                emailjs.send(
-                  process.env.EMAILJS_SERVICE_ID,
-                  process.env.EMAILJS_REGISTER_TEMPLATE_ID,
-                  {
-                    to_email: this.email,
-                    to_name: this.fullName,
-                  },
-                  process.env.EMAILJS_USER_ID
-                )
-              })
-              .catch((error) => {
-                console.log(error)
-              })
-          }
-        })
-        .catch((error) => {
-          if (error.response.data.errors) {
-            // for (const key in error.response.data.errors) {
-            // this.$toast.error(error.response.data.errors[key].msg, {
-            //   icon: {
-            //     name: 'mdi-alert',
-            //   },
-            // })
-            // }
-          }
-        })
+        const { _id } = await request.json()
+
+        if (_id) {
+          // this.$toast.success('Successfully registered', {
+          //   icon: {
+          //     name: 'mdi-check',
+          //   },
+          // })
+
+          // log in if successfully registered
+          await this.$auth.loginWith('local', {
+            data: {
+              email: this.email,
+              password: this.password,
+            },
+          })
+
+          await emailjs.send(
+            process.env.EMAILJS_SERVICE_ID,
+            process.env.EMAILJS_REGISTER_TEMPLATE_ID,
+            {
+              to_email: this.email,
+              to_name: this.fullName,
+            },
+            process.env.EMAILJS_USER_ID
+          )
+        }
+      } catch (error) {
+        if (error.response.data.errors) {
+          // for (const key in error.response.data.errors) {
+          // this.$toast.error(error.response.data.errors[key].msg, {
+          //   icon: {
+          //     name: 'mdi-alert',
+          //   },
+          // })
+          // }
+        } else {
+          console.log(error)
+        }
+      }
     },
   },
 }

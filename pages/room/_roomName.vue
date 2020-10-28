@@ -39,9 +39,7 @@ export default {
           Authorization: $auth.getToken('local'),
         },
       })
-
       const user = await request.json()
-
       return { user }
     } catch (error) {
       console.log(error)

@@ -49,6 +49,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
+    // required for the @nuxtjs/auth module baseUrl
     baseURL: process.env.BASE_URL,
   },
 
