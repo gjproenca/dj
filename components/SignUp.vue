@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card>
-      <v-form v-model="isValidForm" @submit.prevent="register">
+      <v-form v-model="isValidForm" @submit.prevent="signUp">
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
             <v-text-field
@@ -51,11 +51,11 @@
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn type="submit" :disabled="!isValidForm">Register</v-btn>
+            <v-btn type="submit" :disabled="!isValidForm">Sign up</v-btn>
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>
-              Already have an account? <a @click="toggleShowLogin">Login</a>
+              Already have an account? <a @click="toggleShowSignIn">Sign in</a>
             </p>
           </v-col>
         </v-row>
@@ -102,9 +102,9 @@ export default {
   },
 
   methods: {
-    ...mapMutations({ toggleShowLogin: 'loginRegister/toggleShowLogin' }),
+    ...mapMutations({ toggleShowSignIn: 'signInSignUp/toggleShowSignIn' }),
 
-    async register() {
+    async signUp() {
       try {
         const request = await fetch(`${process.env.BASE_URL}/api/user`, {
           method: 'POST',
@@ -121,13 +121,13 @@ export default {
         const { _id } = await request.json()
 
         if (_id) {
-          // this.$toast.success('Successfully registered', {
+          // this.$toast.success('Successfully signed up', {
           //   icon: {
           //     name: 'mdi-check',
           //   },
           // })
 
-          // log in if successfully registered
+          // sign in if successfully signed up
           await this.$auth.loginWith('local', {
             data: {
               email: this.email,
@@ -137,7 +137,7 @@ export default {
 
           await emailjs.send(
             process.env.EMAILJS_SERVICE_ID,
-            process.env.EMAILJS_REGISTER_TEMPLATE_ID,
+            process.env.EMAILJS_SIGN_UP_TEMPLATE_ID,
             {
               to_email: this.email,
               to_name: this.fullName,

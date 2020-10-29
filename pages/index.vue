@@ -3,8 +3,8 @@
     <v-container style="height: 100vh" fill-height fluid>
       <v-row class="d-flex justify-center">
         <v-col sm="8" md="6">
-          <Login v-if="getShowLogin" />
-          <Register v-else />
+          <SignIn v-if="getShowSignIn" />
+          <SignUp v-else />
         </v-col>
       </v-row>
     </v-container>
@@ -13,16 +13,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Login from '@/components/Login.vue'
-import Register from '@/components/Register.vue'
+import SignIn from '@/components/SignIn.vue'
+import SignUp from '@/components/SignUp.vue'
 
 export default {
   components: {
-    Login,
-    Register,
+    SignIn,
+    SignUp,
   },
   computed: {
-    ...mapGetters({ getShowLogin: 'loginRegister/getShowLoginState' }),
+    ...mapGetters({ getShowSignIn: 'signInSignUp/getShowSignInState' }),
   },
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card>
-      <v-form v-model="isValidForm" @submit.prevent="login">
+      <v-form v-model="isValidForm" @submit.prevent="signIn">
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
             <v-text-field
@@ -29,11 +29,11 @@
 
         <v-row>
           <v-col class="d-flex justify-center" cols="12">
-            <v-btn type="submit" :disabled="!isValidForm">Login</v-btn>
+            <v-btn type="submit" :disabled="!isValidForm">Sign in</v-btn>
           </v-col>
           <v-col class="d-flex justify-center" cols="12">
             <p>
-              Don't have an account? <a @click="toggleShowLogin">Register</a>
+              Don't have an account? <a @click="toggleShowSignIn">Sign up</a>
             </p>
           </v-col>
         </v-row>
@@ -68,9 +68,9 @@ export default {
   },
 
   methods: {
-    ...mapMutations({ toggleShowLogin: 'loginRegister/toggleShowLogin' }),
+    ...mapMutations({ toggleShowSignIn: 'signInSignUp/toggleShowSignIn' }),
 
-    async login() {
+    async signIn() {
       try {
         await this.$auth.loginWith('local', {
           data: {

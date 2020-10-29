@@ -1,8 +1,8 @@
 import test from 'ava'
 import { mount } from '@vue/test-utils'
-import Login from '@/components/Login.vue'
+import SignIn from '@/components/SignIn.vue'
 
 test('is a Vue instance', (t) => {
-  const wrapper = mount(Login)
+  const wrapper = mount(SignIn)
   t.truthy(wrapper.vm)
 })

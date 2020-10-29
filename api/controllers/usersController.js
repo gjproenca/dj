@@ -53,8 +53,8 @@ module.exports.createUser = [
   },
 ]
 
-// Login
-module.exports.login = [
+// Sign in
+module.exports.signIn = [
   // validation rules
   validator.body('email', 'Please enter Email').isLength({ min: 1 }),
   validator.body('password', 'Please enter Password').isLength({ min: 1 }),

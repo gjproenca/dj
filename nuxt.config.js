@@ -59,7 +59,7 @@ export default {
         endpoints: {
           // these are the API endpoints created in Express
           login: {
-            url: '/api/user/login',
+            url: '/api/user/sign-in',
             method: 'post',
             propertyName: 'token',
           },
@@ -75,9 +75,9 @@ export default {
       },
     },
     redirect: {
-      login: '/', // User will be redirected to this path if login is required
+      login: '/', // User will be redirected to this path if sign in is required
       logout: '/', // User will be redirected to this path if after logout, current route is protected
-      home: '/home', // User will be redirected to this path after login if accessed login page directly
+      home: '/home', // User will be redirected to this path after sign in if accessed sign in page directly
     },
     rewriteRedirects: true,
   },
