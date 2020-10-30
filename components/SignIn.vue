@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card>
-      <v-form v-model="isValidForm" @submit.prevent="signIn">
+      <!-- <v-form v-model="isValidForm" @submit.prevent="signIn">
         <v-row class="pl-7 pr-7">
           <v-col cols="12">
             <v-text-field
@@ -37,7 +37,7 @@
             </p>
           </v-col>
         </v-row>
-      </v-form>
+      </v-form> -->
     </v-card>
   </div>
 </template>
