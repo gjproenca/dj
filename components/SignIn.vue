@@ -12,8 +12,6 @@
             ></v-text-field>
           </v-col>
 
-          <!-- <v-btn @click="hello">hello</v-btn> -->
-
           <v-col cols="12">
             <v-text-field
               v-model="password"
@@ -71,16 +69,6 @@ export default {
 
   methods: {
     ...mapMutations({ toggleShowSignIn: 'signInSignUp/toggleShowSignIn' }),
-
-    hello() {
-      setInterval(() => {
-        this.$toast.success('Successfully authenticated', {
-          icon: {
-            name: 'mdi-check',
-          },
-        })
-      }, 4000)
-    },
 
     async signIn() {
       try {
