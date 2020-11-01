@@ -53,25 +53,24 @@ export default {
           }),
         })
 
-        // this.$toast.success('Room created', {
-        //   icon: {
-        //     name: 'mdi-check',
-        //   },
-        // })
+        this.$toast.success('Room created', {
+          icon: {
+            name: 'mdi-check',
+          },
+        })
 
         this.roomName = ''
 
         this.$nuxt.refresh()
       } catch (error) {
         if (error.response.data.errors) {
-          // for (const key in error.response.data.errors) {
-          // this.$toast.error(error.response.data.errors[key].msg, {
-          //   icon: {
-          //     name: 'mdi-alert',
-          //   },
-          // })
-          // }
-          console.log(error.response.data.errors)
+          for (const key in error.response.data.errors) {
+            this.$toast.error(error.response.data.errors[key].msg, {
+              icon: {
+                name: 'mdi-alert',
+              },
+            })
+          }
         }
       }
     },

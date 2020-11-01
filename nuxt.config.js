@@ -21,7 +21,7 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
+  css: ['@/assets/toast.scss'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: ['@/plugins/vue-chat-scroll.js'],
@@ -41,7 +41,9 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ['@nuxtjs/axios', '@nuxtjs/auth', '~/io'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth', '~/io', '@nuxtjs/toast'],
+
+  toast: { className: 'toast', iconPack: 'mdi', duration: '5000' },
 
   router: {
     middleware: ['auth'],

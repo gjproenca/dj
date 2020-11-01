@@ -12,6 +12,8 @@
             ></v-text-field>
           </v-col>
 
+          <!-- <v-btn @click="hello">hello</v-btn> -->
+
           <v-col cols="12">
             <v-text-field
               v-model="password"
@@ -70,6 +72,16 @@ export default {
   methods: {
     ...mapMutations({ toggleShowSignIn: 'signInSignUp/toggleShowSignIn' }),
 
+    hello() {
+      setInterval(() => {
+        this.$toast.success('Successfully authenticated', {
+          icon: {
+            name: 'mdi-check',
+          },
+        })
+      }, 4000)
+    },
+
     async signIn() {
       try {
         await this.$auth.loginWith('local', {
@@ -79,20 +91,19 @@ export default {
           },
         })
 
-        // this.$toast.success('Successfully authenticated', {
-        //   icon: {
-        //     name: 'mdi-check',
-        //   },
-        // })
+        this.$toast.success('Successfully authenticated', {
+          icon: {
+            name: 'mdi-check',
+          },
+        })
       } catch (error) {
-        // if (error.response.data.message) {
-        // console.log(error.response.data.message)
-        // this.$toast.error(error.response.data.message, {
-        //   icon: {
-        //     name: 'mdi-alert',
-        //   },
-        // })
-        // }
+        if (error.response.data.message) {
+          this.$toast.error(error.response.data.message, {
+            icon: {
+              name: 'mdi-alert',
+            },
+          })
+        }
       }
     },
   },

@@ -10,12 +10,11 @@ export default {
     async logout() {
       await this.$auth.logout()
 
-      // TODO: toast
-      //   this.$toast.success('Successfully de-authenticated', {
-      //     icon: {
-      //       name: 'mdi-check',
-      //     },
-      //   })
+      this.$toast.success('Successfully de-authenticated', {
+        icon: {
+          name: 'mdi-check',
+        },
+      })
     },
   },
 }

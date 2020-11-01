@@ -121,11 +121,11 @@ export default {
         const { _id } = await request.json()
 
         if (_id) {
-          // this.$toast.success('Successfully signed up', {
-          //   icon: {
-          //     name: 'mdi-check',
-          //   },
-          // })
+          this.$toast.success('Successfully signed up', {
+            icon: {
+              name: 'mdi-check',
+            },
+          })
 
           // sign in if successfully signed up
           await this.$auth.loginWith('local', {
@@ -147,13 +147,13 @@ export default {
         }
       } catch (error) {
         if (error.response.data.errors) {
-          // for (const key in error.response.data.errors) {
-          // this.$toast.error(error.response.data.errors[key].msg, {
-          //   icon: {
-          //     name: 'mdi-alert',
-          //   },
-          // })
-          // }
+          for (const key in error.response.data.errors) {
+            this.$toast.error(error.response.data.errors[key].msg, {
+              icon: {
+                name: 'mdi-alert',
+              },
+            })
+          }
         } else {
           console.log(error)
         }
