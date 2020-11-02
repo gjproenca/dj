@@ -52,7 +52,9 @@ module.exports.createRoom = [
 // Read Room
 module.exports.readRoom = async (req, res) => {
   try {
-    const room = await Room.findOne({ room_name: req.body.room_name }).orFail()
+    const room = await Room.findOne({
+      room_name: req.headers.room_name,
+    }).orFail()
     return res.status(200).json({ room })
   } catch (error) {
     return res.status(500).json({ error: error.message })

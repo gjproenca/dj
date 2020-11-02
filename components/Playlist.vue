@@ -19,7 +19,7 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row v-if="isOwner">
       <v-col cols="8">
         <v-text-field v-model="playlistId" label="Playlist Id"></v-text-field>
       </v-col>
@@ -59,6 +59,13 @@
 
 <script>
 export default {
+  props: {
+    isOwner: {
+      type: Boolean,
+      required: true,
+    },
+  },
+
   data() {
     return {
       playlistId: '',

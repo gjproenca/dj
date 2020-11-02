@@ -1,13 +1,8 @@
 <template>
   <div>
-    <!-- TODO: remove next line -->
-    <client-only placeholder="Loading...">
-      {{ user }}
-    </client-only>
-
     <v-row fill-height fluid>
       <v-col cols="5">
-        <Playlist />
+        <Playlist :isOwner="owner" />
       </v-col>
       <v-col cols="2" align="center">
         <v-divider vertical></v-divider>
@@ -30,17 +25,34 @@ export default {
     Playlist,
   },
 
-  async asyncData({ $auth }) {
+  async asyncData({ $auth, params }) {
     try {
-      const request = await fetch(`${process.env.BASE_URL}/api/user`, {
+      const token = $auth.getToken('local')
+
+      const requestUser = await fetch(`${process.env.BASE_URL}/api/user`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: $auth.getToken('local'),
+          Authorization: token,
         },
       })
-      const user = await request.json()
-      return { user }
+      const {
+        user: { _id: userId },
+      } = await requestUser.json()
+
+      const requestRoom = await fetch(`${process.env.BASE_URL}/api/room`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: token,
+          room_name: params.roomName,
+        },
+      })
+      const {
+        room: { created_by: createdBy },
+      } = await requestRoom.json()
+
+      return { owner: userId === createdBy }
     } catch (error) {
       console.log(error)
     }
@@ -48,7 +60,8 @@ export default {
 
   data() {
     return {
-      user: '',
+      owner: undefined,
+
       socket: {},
     }
   },
