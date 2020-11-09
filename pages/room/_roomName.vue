@@ -1,13 +1,11 @@
 <template>
   <div>
     <v-row fill-height fluid>
-      <v-col cols="5">
-        <Playlist :isOwner="owner" />
+      <v-col cols="6">
+        <Playlist :socket="socket" :is-owner="isOwner" />
       </v-col>
-      <v-col cols="2" align="center">
-        <v-divider vertical></v-divider>
-      </v-col>
-      <v-col cols="5">
+
+      <v-col cols="6">
         <Chat :socket="socket" />
       </v-col>
     </v-row>
@@ -27,24 +25,11 @@ export default {
 
   async asyncData({ $auth, params }) {
     try {
-      const token = $auth.getToken('local')
-
-      const requestUser = await fetch(`${process.env.BASE_URL}/api/user`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-      })
-      const {
-        user: { _id: userId },
-      } = await requestUser.json()
-
       const requestRoom = await fetch(`${process.env.BASE_URL}/api/room`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: token,
+          Authorization: $auth.getToken('local'),
           room_name: params.roomName,
         },
       })
@@ -52,7 +37,7 @@ export default {
         room: { created_by: createdBy },
       } = await requestRoom.json()
 
-      return { owner: userId === createdBy }
+      return { isOwner: $auth.user._id === createdBy }
     } catch (error) {
       console.log(error)
     }
@@ -60,7 +45,7 @@ export default {
 
   data() {
     return {
-      owner: undefined,
+      isOwner: false,
 
       socket: {},
     }
