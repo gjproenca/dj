@@ -1,23 +1,19 @@
 <template>
   <div>
+    <youtube
+      v-if="videoId"
+      :video-id="videoId"
+      :player-vars="playerVars"
+      :fit-parent="true"
+      :resize="true"
+    ></youtube>
+
     <v-card>
       <v-container>
         <v-row>
           <v-col cols="12">
             <h3>Playlist</h3>
             <v-divider></v-divider>
-          </v-col>
-
-          <v-col cols="12">
-            <iframe
-              v-if="iframeSrc"
-              width="100%"
-              height="333"
-              :src="iframeSrc"
-              frameborder="0"
-              allow="autoplay; encrypted-media;"
-              allowfullscreen
-            ></iframe>
           </v-col>
         </v-row>
 
@@ -55,7 +51,7 @@
                     from this like load playlist video and playlist items -->
                     <div v-if="isOwner">
                       <v-list-item-title
-                        @click="setIframeSrc(item.snippet.resourceId.videoId)"
+                        @click="setVideoId(item.snippet.resourceId.videoId)"
                       >
                         {{ item.snippet.position + 1 }} -
                         {{ item.snippet.title }}
@@ -95,14 +91,20 @@ export default {
     return {
       playlistId: '',
       playlistItems: [],
-      iframeSrc: '',
+
+      videoId: '',
+      playerVars: {
+        autoplay: 1,
+        modestbranding: 1,
+        iv_load_policy: 3,
+      },
     }
   },
 
   watch: {
-    iframeSrc() {
+    videoId() {
       if (this.isOwner) {
-        this.socket.emit('new-playlist-item', { iframeSrc: this.iframeSrc })
+        this.socket.emit('new-playlist-item', { videoId: this.videoId })
       }
     },
   },
@@ -110,7 +112,7 @@ export default {
   beforeMount() {
     if (!this.isOwner) {
       this.socket.on('refresh-playlist-item', (item) => {
-        this.iframeSrc = item.iframeSrc
+        this.videoId = item.videoId
       })
     }
   },
@@ -134,8 +136,8 @@ export default {
       }
     },
 
-    setIframeSrc($event) {
-      this.iframeSrc = `https://www.youtube-nocookie.com/embed/${$event}?autoplay=1&modestbranding=1&iv_load_policy=3`
+    setVideoId($event) {
+      this.videoId = $event
     },
   },
 }

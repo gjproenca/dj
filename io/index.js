@@ -27,6 +27,7 @@ export default function () {
       socket.on('send-message', (message) => {
         io.to(roomId).emit('new-message', message)
       })
+
       socket.on('new-playlist-item', (item) => {
         io.to(roomId).emit('refresh-playlist-item', item)
       })
