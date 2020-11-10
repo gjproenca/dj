@@ -24,7 +24,7 @@ export default {
   css: ['@/assets/toast.scss'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['@/plugins/vue-chat-scroll.js'],
+  plugins: ['@/plugins/vue-chat-scroll.js', '@/plugins/vue-youtube.js'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,

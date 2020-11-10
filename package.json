@@ -38,7 +38,8 @@
     "nuxt": "^2.14.6",
     "socket.io": "^3.0.0",
     "socket.io-client": "^3.0.1",
-    "vue-chat-scroll": "^1.4.0"
+    "vue-chat-scroll": "^1.4.0",
+    "vue-youtube": "^1.4.0"
   },
   "devDependencies": {
     "@ava/babel": "^1.0.1",
