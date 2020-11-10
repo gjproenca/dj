@@ -4,20 +4,20 @@
 
     <h1>Rooms</h1>
 
-    <client-only placeholder="Loading...">
-      <div v-if="rooms.length">
-        <div v-for="(room, index) in rooms" :key="index">
-          <n-link :to="'/room/' + room.room_name" class="link">
-            <v-btn>Join Room {{ room.room_name }}</v-btn>
-          </n-link>
+    <!-- <client-only placeholder="Loading..."> -->
+    <div v-if="rooms.length">
+      <div v-for="(room, index) in rooms" :key="index">
+        <n-link :to="'/room/' + room.room_name" class="link">
+          <v-btn>Join Room {{ room.room_name }}</v-btn>
+        </n-link>
 
-          <v-divider class="mt-3 mb-3" />
-        </div>
+        <v-divider class="mt-3 mb-3" />
       </div>
-      <div v-else>
-        {{ error }}
-      </div>
-    </client-only>
+    </div>
+    <div v-else>
+      {{ error }}
+    </div>
+    <!-- </client-only> -->
   </div>
 </template>
 
@@ -38,8 +38,8 @@ export default {
           Authorization: $auth.getToken('local'),
         },
       })
-      const { rooms } = await request.json()
-      return { rooms }
+      const data = await request.json()
+      return data.rooms ? { rooms: data.rooms } : { error: data.error }
     } catch (error) {
       return { error: error.response.data.error }
     }
