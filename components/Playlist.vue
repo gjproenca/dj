@@ -1,11 +1,12 @@
 <template>
   <div>
     <youtube
-      v-if="videoId"
-      :video-id="videoId"
+      v-if="videoInfo.videoId"
+      :video-id="videoInfo.videoId"
       :player-vars="playerVars"
       :fit-parent="true"
       :resize="true"
+      @ended="ended"
     ></youtube>
 
     <v-card>
@@ -51,7 +52,12 @@
                     from this like load playlist video and playlist items -->
                     <div v-if="isOwner">
                       <v-list-item-title
-                        @click="setVideoId(item.snippet.resourceId.videoId)"
+                        @click="
+                          setVideoInfo({
+                            position: item.snippet.position,
+                            videoId: item.snippet.resourceId.videoId,
+                          })
+                        "
                       >
                         {{ item.snippet.position + 1 }} -
                         {{ item.snippet.title }}
@@ -92,7 +98,7 @@ export default {
       playlistId: '',
       playlistItems: [],
 
-      videoId: '',
+      videoInfo: { position: 0, videoId: '' },
       playerVars: {
         autoplay: 1,
         modestbranding: 1,
@@ -102,9 +108,12 @@ export default {
   },
 
   watch: {
-    videoId() {
+    videoInfo() {
       if (this.isOwner) {
-        this.socket.emit('new-playlist-item', { videoId: this.videoId })
+        this.socket.emit('new-playlist-item', {
+          position: this.videoInfo.position,
+          videoId: this.videoInfo.videoId,
+        })
       }
     },
   },
@@ -112,7 +121,8 @@ export default {
   beforeMount() {
     if (!this.isOwner) {
       this.socket.on('refresh-playlist-item', (item) => {
-        this.videoId = item.videoId
+        this.videoInfo.position = item.position
+        this.videoInfo.videoId = item.videoId
       })
     }
   },
@@ -136,8 +146,18 @@ export default {
       }
     },
 
-    setVideoId($event) {
-      this.videoId = $event
+    setVideoInfo($event) {
+      this.videoInfo.position = $event.position
+      this.videoInfo.videoId = $event.videoId
+    },
+
+    ended() {
+      this.videoInfo.position++
+      if (this.playlistItems.length > this.videoInfo.position) {
+        this.videoInfo.videoId = this.playlistItems[
+          this.videoInfo.position
+        ].snippet.resourceId.videoId
+      }
     },
   },
 }
