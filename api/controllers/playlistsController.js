@@ -45,7 +45,7 @@ module.exports.createPlaylist = [
 module.exports.readPlaylist = async (req, res) => {
   try {
     const playlist = await Playlist.findOne({
-      playlist_id: req.body.playlist_id,
+      playlist_id: req.headers.playlist_id,
     }).orFail()
     return res.status(200).json({ playlist })
   } catch (error) {

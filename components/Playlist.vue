@@ -126,18 +126,51 @@ export default {
   methods: {
     async loadPlaylist() {
       try {
-        const request = await fetch(
-          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${this.playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
+        const requestReadPlaylistMongo = await fetch(
+          `${process.env.BASE_URL}/api/playlist`,
           {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: this.$auth.getToken('local'),
+              playlist_id: this.playlistId,
             },
           }
         )
-        const { items } = await request.json()
+        const responseReadPlaylistMongo = await requestReadPlaylistMongo.json()
 
-        this.playlistItems = items
+        if (responseReadPlaylistMongo.error) {
+          const requestReadPlaylistYoutube = await fetch(
+            `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${this.playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          const responseReadPlaylistYoutube = await requestReadPlaylistYoutube.json()
+
+          if (responseReadPlaylistYoutube.error.code === 404) {
+            throw new Error('Playlist not found')
+          }
+
+          this.playlistItems = responseReadPlaylistYoutube.items
+
+          fetch(`${process.env.BASE_URL}/api/playlist`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: this.$auth.getToken('local'),
+            },
+            body: JSON.stringify({
+              playlist_id: this.playlistId,
+              playlist_items: this.playlistItems,
+            }),
+          })
+        } else {
+          this.playlistItems = responseReadPlaylistMongo.playlist.playlist_items
+        }
 
         this.playlistVideoIds = this.playlistItems.map(
           (item) => item.snippet.resourceId.videoId
@@ -148,7 +181,11 @@ export default {
           this.videoInfo.position
         )
       } catch (error) {
-        console.log(error)
+        this.$toast.error(error.message, {
+          icon: {
+            name: 'mdi-alert',
+          },
+        })
       }
     },
 
