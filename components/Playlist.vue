@@ -2,21 +2,21 @@
   <div>
     <v-card>
       <v-container>
-        <v-row>
-          <v-col cols="12">
-            <div>
-              <h3>Playlist</h3>
-              <v-divider></v-divider>
-              <youtube
-                ref="youtube"
-                :player-vars="playerVars"
-                :fit-parent="true"
-                :resize="true"
-                @cued="playVideo"
-              ></youtube>
-            </div>
-          </v-col>
-        </v-row>
+        <!-- <v-row>
+          <v-col cols="12"> -->
+        <div>
+          <h3>Playlist</h3>
+          <v-divider></v-divider>
+          <youtube
+            ref="youtube"
+            :player-vars="playerVars"
+            :fit-parent="true"
+            :resize="true"
+            @cued="playVideo"
+          ></youtube>
+        </div>
+        <!-- </v-col>
+        </v-row> -->
 
         <v-row v-if="isOwner">
           <v-col cols="12">
@@ -33,7 +33,6 @@
             <v-virtual-scroll
               v-chat-scroll="{ always: false, smooth: true }"
               :items="playlistItems"
-              :bench="3"
               height="250"
               item-height="50"
             >
@@ -128,7 +127,7 @@ export default {
     async loadPlaylist() {
       try {
         const request = await fetch(
-          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${this.playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
+          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${this.playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
           {
             method: 'GET',
             headers: {
