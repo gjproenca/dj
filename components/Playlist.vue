@@ -1,32 +1,29 @@
 <template>
   <div>
-    <youtube
-      v-if="videoInfo.videoId"
-      :video-id="videoInfo.videoId"
-      :player-vars="playerVars"
-      :fit-parent="true"
-      :resize="true"
-      @ended="ended"
-    ></youtube>
-
     <v-card>
       <v-container>
         <v-row>
           <v-col cols="12">
-            <h3>Playlist</h3>
-            <v-divider></v-divider>
+            <div>
+              <h3>Playlist</h3>
+              <v-divider></v-divider>
+              <youtube
+                ref="youtube"
+                :player-vars="playerVars"
+                :fit-parent="true"
+                :resize="true"
+                @cued="playVideo"
+              ></youtube>
+            </div>
           </v-col>
         </v-row>
 
         <v-row v-if="isOwner">
-          <v-col cols="8">
+          <v-col cols="12">
             <v-text-field
               v-model="playlistId"
               label="Playlist Id"
             ></v-text-field>
-          </v-col>
-
-          <v-col cols="4">
             <v-btn @click="loadPlaylist">Load Playlist</v-btn>
           </v-col>
         </v-row>
@@ -95,12 +92,12 @@ export default {
 
   data() {
     return {
-      playlistId: '',
+      playlistId: 'PLH69W7vrLQqZuiM2YbS8prU7ddDWZuM7U',
       playlistItems: [],
+      playlistVideoIds: [],
 
       videoInfo: { position: 0, videoId: '' },
       playerVars: {
-        autoplay: 1,
         modestbranding: 1,
         iv_load_policy: 3,
       },
@@ -131,7 +128,7 @@ export default {
     async loadPlaylist() {
       try {
         const request = await fetch(
-          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PLH69W7vrLQqZuiM2YbS8prU7ddDWZuM7U&key=${process.env.YOUTUBE_API_KEY}`,
+          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${this.playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
           {
             method: 'GET',
             headers: {
@@ -140,7 +137,17 @@ export default {
           }
         )
         const { items } = await request.json()
+
         this.playlistItems = items
+
+        this.playlistVideoIds = this.playlistItems.map(
+          (item) => item.snippet.resourceId.videoId
+        )
+
+        this.$refs.youtube.player.cuePlaylist(
+          this.playlistVideoIds,
+          this.videoInfo.position
+        )
       } catch (error) {
         console.log(error)
       }
@@ -149,15 +156,15 @@ export default {
     setVideoInfo($event) {
       this.videoInfo.position = $event.position
       this.videoInfo.videoId = $event.videoId
+
+      this.$refs.youtube.player.cuePlaylist(
+        this.playlistVideoIds,
+        this.videoInfo.position
+      )
     },
 
-    ended() {
-      this.videoInfo.position++
-      if (this.playlistItems.length > this.videoInfo.position) {
-        this.videoInfo.videoId = this.playlistItems[
-          this.videoInfo.position
-        ].snippet.resourceId.videoId
-      }
+    playVideo() {
+      this.$refs.youtube.player.playVideo()
     },
   },
 }
