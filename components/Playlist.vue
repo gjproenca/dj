@@ -50,7 +50,6 @@
                       <v-list-item-title
                         @click="
                           setVideoInfo({
-                            position: item.snippet.position,
                             videoId: item.snippet.resourceId.videoId,
                           })
                         "
@@ -93,6 +92,8 @@ export default {
     return {
       playlistId: 'PLH69W7vrLQqZuiM2YbS8prU7ddDWZuM7U',
       playlistItems: [],
+      // FIXME: Find way to remove playlist video ids ie: only use
+      // playlist items
       playlistVideoIds: [],
 
       videoInfo: { position: 0, videoId: '' },
@@ -126,6 +127,7 @@ export default {
   methods: {
     async loadPlaylist() {
       try {
+        // Attempt to load playlist from mongoDb
         const requestReadPlaylistMongo = await fetch(
           `${process.env.BASE_URL}/api/playlist`,
           {
@@ -139,28 +141,44 @@ export default {
         )
         const responseReadPlaylistMongo = await requestReadPlaylistMongo.json()
 
+        // If playlist does not exist in mongoDb fetch it from youtube
+        // and create/save it to mongoDb
         if (responseReadPlaylistMongo.error) {
-          const requestReadPlaylistYoutube = await fetch(
-            `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${this.playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+          let nextPageToken = ''
+          let requestReadPlaylistYoutube
+          let responseReadPlaylistYoutube
+
+          do {
+            requestReadPlaylistYoutube = await fetch(
+              `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken=${nextPageToken}&playlistId=${this.playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            )
+            responseReadPlaylistYoutube = await requestReadPlaylistYoutube.json()
+
+            // Check if playlist exists
+            if (responseReadPlaylistYoutube?.error?.code === 404) {
+              throw new Error('Playlist not found')
             }
-          )
-          const responseReadPlaylistYoutube = await requestReadPlaylistYoutube.json()
 
-          if (responseReadPlaylistYoutube.error.code === 404) {
-            throw new Error('Playlist not found')
-          }
+            this.playlistItems = [
+              ...this.playlistItems,
+              ...responseReadPlaylistYoutube.items,
+            ]
 
-          this.playlistItems = responseReadPlaylistYoutube.items
+            nextPageToken = responseReadPlaylistYoutube.nextPageToken
+          } while (nextPageToken)
 
+          // Create playlist in mongoDb
           fetch(`${process.env.BASE_URL}/api/playlist`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              Accept: 'application/json',
               Authorization: this.$auth.getToken('local'),
             },
             body: JSON.stringify({
@@ -176,9 +194,13 @@ export default {
           (item) => item.snippet.resourceId.videoId
         )
 
+        // Cue first and second playlist videos or first video
+        // if it only has one
         this.$refs.youtube.player.cuePlaylist(
-          this.playlistVideoIds,
-          this.videoInfo.position
+          this.playlistVideoIds[1]
+            ? [this.playlistVideoIds[0], this.playlistVideoIds[1]]
+            : [this.playlistVideoIds[0]],
+          0
         )
       } catch (error) {
         this.$toast.error(error.message, {
@@ -190,13 +212,41 @@ export default {
     },
 
     setVideoInfo($event) {
-      this.videoInfo.position = $event.position
       this.videoInfo.videoId = $event.videoId
+      const indexVideoId = this.playlistVideoIds.indexOf(this.videoInfo.videoId)
+      this.videoInfo.position = indexVideoId
 
-      this.$refs.youtube.player.cuePlaylist(
-        this.playlistVideoIds,
-        this.videoInfo.position
-      )
+      try {
+        let cuePlaylist = []
+
+        if (indexVideoId === 0 && this.playlistVideoIds.length === 1) {
+          cuePlaylist = [this.playlistVideoIds[0]]
+          return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 0)
+        } else if (indexVideoId === 0 && this.playlistVideoIds[1]) {
+          cuePlaylist = [this.playlistVideoIds[0], this.playlistVideoIds[1]]
+          return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 0)
+        } else if (
+          indexVideoId > 0 &&
+          indexVideoId < this.playlistVideoIds.length - 1
+        ) {
+          cuePlaylist = [
+            this.playlistVideoIds[indexVideoId - 1],
+            this.playlistVideoIds[indexVideoId],
+            this.playlistVideoIds[indexVideoId + 1],
+          ]
+
+          return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 1)
+        } else {
+          cuePlaylist = [
+            this.playlistVideoIds[indexVideoId - 1],
+            this.playlistVideoIds[indexVideoId],
+          ]
+
+          return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 1)
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
     },
 
     playVideo() {
