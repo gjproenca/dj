@@ -36,7 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.15",
     "nuxt": "^2.14.6",
-    "socket.io": "^3.0.0",
+    "socket.io": "^3.0.3",
     "socket.io-client": "^3.0.3",
     "vue-chat-scroll": "^1.4.0",
     "vue-youtube": "^1.4.0"
