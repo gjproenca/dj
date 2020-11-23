@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <v-app-bar v-if="$nuxt.$route.path !== '/'" app>
-      <div v-for="(button, index) in buttons" :key="index">
-        <component :is="button"></component>
-      </div>
+      <ButtonHome />
+      <v-spacer></v-spacer>
+      <ButtonSignOut />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -23,18 +23,12 @@
 
 <script>
 import ButtonHome from '@/components/buttons/ButtonHome.vue'
-import ButtonLogout from '@/components/buttons/ButtonLogout.vue'
+import ButtonSignOut from '@/components/buttons/ButtonSignOut.vue'
 
 export default {
   components: {
     ButtonHome,
-    ButtonLogout,
-  },
-
-  data() {
-    return {
-      buttons: [ButtonHome, ButtonLogout],
-    }
+    ButtonSignOut,
   },
 }
 </script>

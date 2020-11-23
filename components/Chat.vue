@@ -15,7 +15,7 @@
             height="390"
             item-height="30"
           >
-            <template v-slot="{ item }">
+            <template #default="{ item }">
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title>

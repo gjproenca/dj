@@ -36,7 +36,7 @@
               height="250"
               item-height="50"
             >
-              <template v-slot="{ item }">
+              <template #default="{ item }">
                 <v-list-item>
                   <v-list-item-avatar rounded>
                     <v-img :src="item.snippet.thumbnails.default.url"></v-img>
