@@ -12,7 +12,8 @@
             :player-vars="playerVars"
             :fit-parent="true"
             :resize="true"
-            @cued="playVideo"
+            @cued="cued"
+            @playing="playing"
           ></youtube>
         </div>
         <!-- </v-col>
@@ -96,7 +97,7 @@ export default {
       // playlist items
       playlistVideoIds: [],
 
-      videoInfo: { position: 0, videoId: '' },
+      videoInfo: { position: undefined, videoId: undefined },
       playerVars: {
         modestbranding: 1,
         iv_load_policy: 3,
@@ -105,12 +106,17 @@ export default {
   },
 
   watch: {
-    videoInfo() {
+    // Watch position property of videoInfo object
+    'videoInfo.position'() {
       if (this.isOwner) {
         this.socket.emit('new-playlist-item', {
           position: this.videoInfo.position,
           videoId: this.videoInfo.videoId,
         })
+      }
+
+      if (this.playlistVideoIds) {
+        this.cueVideo()
       }
     },
   },
@@ -187,6 +193,7 @@ export default {
             }),
           })
         } else {
+          // Assign the mongoDb response with the playlist to the playlistItems variable
           this.playlistItems = responseReadPlaylistMongo.playlist.playlist_items
         }
 
@@ -194,14 +201,11 @@ export default {
           (item) => item.snippet.resourceId.videoId
         )
 
-        // Cue first and second playlist videos or first video
-        // if it only has one
-        this.$refs.youtube.player.cuePlaylist(
-          this.playlistVideoIds[1]
-            ? [this.playlistVideoIds[0], this.playlistVideoIds[1]]
-            : [this.playlistVideoIds[0]],
-          0
-        )
+        // Autoplay if playlist has videos
+        if (this.playlistVideoIds[0]) {
+          this.videoInfo.position = 0
+          this.videoInfo.videoId = this.playlistVideoIds[0]
+        }
       } catch (error) {
         this.$toast.error(error.message, {
           icon: {
@@ -213,33 +217,53 @@ export default {
 
     setVideoInfo($event) {
       this.videoInfo.videoId = $event.videoId
-      const indexVideoId = this.playlistVideoIds.indexOf(this.videoInfo.videoId)
-      this.videoInfo.position = indexVideoId
+      this.videoInfo.position = this.playlistVideoIds.indexOf(
+        this.videoInfo.videoId
+      )
+    },
 
+    cued() {
+      this.$refs.youtube.player.playVideo()
+    },
+
+    async playing() {
+      let videoUrl = await this.$refs.youtube.player.getVideoUrl()
+      videoUrl = videoUrl.match(/v=.+/gm)
+      videoUrl = videoUrl[0].replace('v=', '')
+
+      if (this.videoInfo.videoId !== videoUrl) {
+        this.videoInfo.position = this.playlistVideoIds.indexOf(videoUrl)
+      }
+    },
+
+    cueVideo() {
       try {
         let cuePlaylist = []
 
-        if (indexVideoId === 0 && this.playlistVideoIds.length === 1) {
+        if (
+          this.videoInfo.position === 0 &&
+          this.playlistVideoIds.length === 1
+        ) {
           cuePlaylist = [this.playlistVideoIds[0]]
           return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 0)
-        } else if (indexVideoId === 0 && this.playlistVideoIds[1]) {
+        } else if (this.videoInfo.position === 0 && this.playlistVideoIds[1]) {
           cuePlaylist = [this.playlistVideoIds[0], this.playlistVideoIds[1]]
           return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 0)
         } else if (
-          indexVideoId > 0 &&
-          indexVideoId < this.playlistVideoIds.length - 1
+          this.videoInfo.position > 0 &&
+          this.videoInfo.position < this.playlistVideoIds.length - 1
         ) {
           cuePlaylist = [
-            this.playlistVideoIds[indexVideoId - 1],
-            this.playlistVideoIds[indexVideoId],
-            this.playlistVideoIds[indexVideoId + 1],
+            this.playlistVideoIds[this.videoInfo.position - 1],
+            this.playlistVideoIds[this.videoInfo.position],
+            this.playlistVideoIds[this.videoInfo.position + 1],
           ]
 
           return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 1)
         } else {
           cuePlaylist = [
-            this.playlistVideoIds[indexVideoId - 1],
-            this.playlistVideoIds[indexVideoId],
+            this.playlistVideoIds[this.videoInfo.position - 1],
+            this.playlistVideoIds[this.videoInfo.position],
           ]
 
           return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 1)
@@ -247,10 +271,6 @@ export default {
       } catch (error) {
         console.log(error.message)
       }
-    },
-
-    playVideo() {
-      this.$refs.youtube.player.playVideo()
     },
   },
 }
