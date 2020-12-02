@@ -2,41 +2,22 @@
   <div>
     <v-card>
       <v-container>
+        <!-- <v-row>
+          <v-col cols="12"> -->
         <div>
           <h3>Playlist</h3>
           <v-divider></v-divider>
           <youtube
             ref="youtube"
-            :video-id="videoInfo.videoId"
             :player-vars="playerVars"
             :fit-parent="true"
             :resize="true"
+            @cued="cued"
             @playing="playing"
-            @paused="paused"
-            @ended="ended"
           ></youtube>
         </div>
-
-        <v-row>
-          <v-col cols="4" align="center">
-            <v-btn @click="previousVideo">
-              <div class="mdi mdi-36px mdi-skip-previous-circle-outline"></div>
-            </v-btn>
-          </v-col>
-          <v-col cols="4" align="center">
-            <v-btn v-if="isPlaying" @click="playVideo">
-              <div class="mdi mdi-36px mdi-play-circle-outline"></div>
-            </v-btn>
-            <v-btn v-else @click="pauseVideo">
-              <div class="mdi mdi-36px mdi-pause-circle-outline"></div>
-            </v-btn>
-          </v-col>
-          <v-col cols="4" align="center">
-            <v-btn @click="nextVideo">
-              <div class="mdi mdi-36px mdi-skip-next-circle-outline"></div>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <!-- </v-col>
+        </v-row> -->
 
         <v-row v-if="isOwner">
           <v-col cols="12">
@@ -118,12 +99,9 @@ export default {
 
       videoInfo: { position: undefined, videoId: undefined },
       playerVars: {
-        autoplay: 1,
         modestbranding: 1,
         iv_load_policy: 3,
       },
-
-      isPlaying: false,
     }
   },
 
@@ -135,6 +113,10 @@ export default {
           position: this.videoInfo.position,
           videoId: this.videoInfo.videoId,
         })
+      }
+
+      if (this.playlistVideoIds) {
+        this.cueVideo()
       }
     },
   },
@@ -240,38 +222,55 @@ export default {
       )
     },
 
-    playVideo() {
+    cued() {
       this.$refs.youtube.player.playVideo()
     },
 
-    pauseVideo() {
-      this.$refs.youtube.player.pauseVideo()
-    },
+    async playing() {
+      let videoUrl = await this.$refs.youtube.player.getVideoUrl()
+      videoUrl = videoUrl.match(/v=.+/gm)
+      videoUrl = videoUrl[0].replace('v=', '')
 
-    playing() {
-      this.isPlaying = false
-    },
-
-    paused() {
-      this.isPlaying = true
-    },
-
-    nextVideo() {
-      if (this.videoInfo.position < this.playlistVideoIds.length) {
-        this.videoInfo.position++
-        this.videoInfo.videoId = this.playlistVideoIds[this.videoInfo.position]
+      if (this.videoInfo.videoId !== videoUrl) {
+        this.videoInfo.position = this.playlistVideoIds.indexOf(videoUrl)
       }
     },
 
-    previousVideo() {
-      if (this.videoInfo.position > 0) {
-        this.videoInfo.position--
-        this.videoInfo.videoId = this.playlistVideoIds[this.videoInfo.position]
-      }
-    },
+    cueVideo() {
+      try {
+        let cuePlaylist = []
 
-    ended() {
-      this.nextVideo()
+        if (
+          this.videoInfo.position === 0 &&
+          this.playlistVideoIds.length === 1
+        ) {
+          cuePlaylist = [this.playlistVideoIds[0]]
+          return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 0)
+        } else if (this.videoInfo.position === 0 && this.playlistVideoIds[1]) {
+          cuePlaylist = [this.playlistVideoIds[0], this.playlistVideoIds[1]]
+          return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 0)
+        } else if (
+          this.videoInfo.position > 0 &&
+          this.videoInfo.position < this.playlistVideoIds.length - 1
+        ) {
+          cuePlaylist = [
+            this.playlistVideoIds[this.videoInfo.position - 1],
+            this.playlistVideoIds[this.videoInfo.position],
+            this.playlistVideoIds[this.videoInfo.position + 1],
+          ]
+
+          return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 1)
+        } else {
+          cuePlaylist = [
+            this.playlistVideoIds[this.videoInfo.position - 1],
+            this.playlistVideoIds[this.videoInfo.position],
+          ]
+
+          return this.$refs.youtube.player.cuePlaylist(cuePlaylist, 1)
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
     },
   },
 }
