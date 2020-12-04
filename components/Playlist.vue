@@ -36,6 +36,17 @@
               <div class="mdi mdi-36px mdi-skip-next-circle-outline"></div>
             </v-btn>
           </v-col>
+          <v-col cols="12" align="center">
+            <div>
+              {{ videoInfo.videoProgress }}
+              <v-slider
+                v-model="videoInfo.videoProgress"
+                :max="videoInfo.videoLength"
+                @mouseup="sliderMouseUpVideoProgress"
+              >
+              </v-slider>
+            </div>
+          </v-col>
         </v-row>
 
         <v-row v-if="isOwner">
@@ -116,7 +127,12 @@ export default {
       // playlist items
       playlistVideoIds: [],
 
-      videoInfo: { position: undefined, videoId: undefined },
+      videoInfo: {
+        position: undefined,
+        videoId: undefined,
+        videoLength: undefined,
+        videoProgress: 0,
+      },
       playerVars: {
         autoplay: 1,
         modestbranding: 1,
@@ -124,6 +140,8 @@ export default {
       },
 
       isPlaying: false,
+
+      videoProgressInterval: undefined,
     }
   },
 
@@ -248,12 +266,26 @@ export default {
       this.$refs.youtube.player.pauseVideo()
     },
 
-    playing() {
+    async playing() {
       this.isPlaying = false
+      this.videoInfo.videoLength = await this.$refs.youtube.player.getDuration()
+
+      if (this.videoProgressInterval) {
+        clearInterval(this.videoProgressInterval)
+      }
+
+      this.videoProgressInterval = setInterval(
+        () => this.videoInfo.videoProgress++,
+        1000
+      )
     },
 
     paused() {
       this.isPlaying = true
+
+      if (this.videoProgressInterval) {
+        clearInterval(this.videoProgressInterval)
+      }
     },
 
     nextVideo() {
@@ -261,6 +293,8 @@ export default {
         this.videoInfo.position++
         this.videoInfo.videoId = this.playlistVideoIds[this.videoInfo.position]
       }
+
+      this.videoInfo.videoProgress = 0
     },
 
     previousVideo() {
@@ -268,10 +302,16 @@ export default {
         this.videoInfo.position--
         this.videoInfo.videoId = this.playlistVideoIds[this.videoInfo.position]
       }
+
+      this.videoInfo.videoProgress = 0
     },
 
     ended() {
       this.nextVideo()
+    },
+
+    sliderMouseUpVideoProgress() {
+      this.$refs.youtube.player.seekTo(this.videoInfo.videoProgress)
     },
   },
 }
