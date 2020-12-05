@@ -38,11 +38,15 @@
           </v-col>
           <v-col cols="12" align="center">
             <div>
-              {{ videoInfo.videoProgress }}
+              {{ Math.floor(videoInfo.videoProgress / 60) }}:{{
+                videoInfo.videoProgress -
+                Math.floor(videoInfo.videoProgress / 60) * 60
+              }}
               <v-slider
                 v-model="videoInfo.videoProgress"
                 :max="videoInfo.videoLength"
                 @mouseup="sliderMouseUpVideoProgress"
+                @mousedown="sliderMouseDownVideoProgress"
               >
               </v-slider>
             </div>
@@ -53,9 +57,11 @@
           <v-col cols="12">
             <v-text-field
               v-model="playlistId"
-              label="Playlist Id"
+              label="Playlist Url"
             ></v-text-field>
-            <v-btn @click="loadPlaylist">Load Playlist</v-btn>
+            <v-btn @click="loadPlaylist" :disabled="!playlistId"
+              >Load Playlist</v-btn
+            >
           </v-col>
         </v-row>
 
@@ -121,7 +127,7 @@ export default {
 
   data() {
     return {
-      playlistId: 'PLH69W7vrLQqZuiM2YbS8prU7ddDWZuM7U',
+      playlistId: '',
       playlistItems: [],
       // FIXME: Find way to remove playlist video ids ie: only use
       // playlist items
@@ -169,15 +175,20 @@ export default {
   methods: {
     async loadPlaylist() {
       try {
+        let playlistId = this.playlistId.match(/list=\w+/)
+
+        if (playlistId) {
+          playlistId = playlistId[0].replace('list=', '')
+        }
+
         // Attempt to load playlist from mongoDb
         const requestReadPlaylistMongo = await fetch(
           `${process.env.BASE_URL}/api/playlist`,
           {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
               Authorization: this.$auth.getToken('local'),
-              playlist_id: this.playlistId,
+              playlist_id: playlistId,
             },
           }
         )
@@ -192,7 +203,7 @@ export default {
 
           do {
             requestReadPlaylistYoutube = await fetch(
-              `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken=${nextPageToken}&playlistId=${this.playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
+              `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken=${nextPageToken}&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`,
               {
                 method: 'GET',
                 headers: {
@@ -224,7 +235,7 @@ export default {
               Authorization: this.$auth.getToken('local'),
             },
             body: JSON.stringify({
-              playlist_id: this.playlistId,
+              playlist_id: playlistId,
               playlist_items: this.playlistItems,
             }),
           })
@@ -308,6 +319,12 @@ export default {
 
     ended() {
       this.nextVideo()
+    },
+
+    sliderMouseDownVideoProgress() {
+      if (this.videoProgressInterval) {
+        clearInterval(this.videoProgressInterval)
+      }
     },
 
     sliderMouseUpVideoProgress() {

@@ -16,7 +16,6 @@ export default function () {
 
     // Add socket.io events
     io.on('connect', (socket) => {
-      console.log('socket id', socket.id)
       let roomId
 
       socket.on('join-room', (room) => {
