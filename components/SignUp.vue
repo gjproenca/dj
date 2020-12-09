@@ -117,25 +117,32 @@ export default {
             password: this.password,
           }),
         })
+        const response = await request.json()
 
-        const { _id } = await request.json()
+        if (response?.errors?.email?.msg) {
+          return this.$toast.error(response.errors.email.msg, {
+            icon: {
+              name: 'mdi-alert',
+            },
+          })
+        }
 
-        if (_id) {
+        if (response._id) {
           this.$toast.success('Successfully signed up', {
             icon: {
               name: 'mdi-check',
             },
           })
 
-          // sign in if successfully signed up
-          await this.$auth.loginWith('local', {
+          // Sign in if successfully signed up
+          this.$auth.loginWith('local', {
             data: {
               email: this.email,
               password: this.password,
             },
           })
 
-          await emailjs.send(
+          emailjs.send(
             process.env.EMAILJS_SERVICE_ID,
             process.env.EMAILJS_SIGN_UP_TEMPLATE_ID,
             {
@@ -146,7 +153,7 @@ export default {
           )
         }
       } catch (error) {
-        if (error.response.data.errors) {
+        if (error?.response?.data?.errors) {
           for (const key in error.response.data.errors) {
             this.$toast.error(error.response.data.errors[key].msg, {
               icon: {

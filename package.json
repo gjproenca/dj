@@ -15,8 +15,8 @@
     "test:e2e": "cross-env TEST=e2e ava ./test/e2e/**/* --timeout=5m"
   },
   "lint-staged": {
-    "*.{js,vue}": "eslint",
-    "*.{css,vue}": "stylelint"
+    "*.{js,vue}": "eslint --fix",
+    "*.{css,vue}": "stylelint --fix"
   },
   "husky": {
     "hooks": {
@@ -32,10 +32,10 @@
     "core-js": "^3.8.1",
     "emailjs-com": "^2.6.4",
     "express": "^4.17.1",
-    "express-validator": "^6.7.0",
+    "express-validator": "^6.8.0",
     "jsonwebtoken": "^8.5.1",
-    "nuxt": "^2.14.10",
     "mongoose": "^5.11.5",
+    "nuxt": "^2.14.10",
     "socket.io": "^3.0.4",
     "socket.io-client": "^3.0.4",
     "vue-chat-scroll": "^1.4.0",

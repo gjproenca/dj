@@ -59,7 +59,7 @@
               v-model="playlistId"
               label="Playlist Url"
             ></v-text-field>
-            <v-btn @click="loadPlaylist" :disabled="!playlistId"
+            <v-btn :disabled="!playlistId" @click="loadPlaylist"
               >Load Playlist</v-btn
             >
           </v-col>
@@ -80,9 +80,7 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <!-- TODO: refactor possibly extract 2 different component 
-                    when is owner and when it isnt or extract smaller components
-                    from this like load playlist video and playlist items -->
+                    <!-- TODO: refactor possibly extract 2 different component when is owner and when it isnt or extract smaller components from this like load playlist video and playlist items -->
                     <div v-if="isOwner">
                       <v-list-item-title
                         @click="
