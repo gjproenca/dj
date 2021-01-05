@@ -7,7 +7,7 @@
     <!-- <client-only placeholder="Loading..."> -->
     <div v-if="rooms.length">
       <div v-for="(room, index) in rooms" :key="index">
-        <n-link :to="'/room/' + room.room_name" class="link">
+        <n-link :to="encodeURI(`/room/${room.room_name}`)" class="link">
           <v-btn>Join Room {{ room.room_name }}</v-btn>
         </n-link>
 

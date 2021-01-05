@@ -17,7 +17,7 @@
           ></youtube>
         </div>
 
-        <v-row>
+        <v-row v-if="playlistVideoIds.length">
           <v-col cols="4" align="center">
             <v-btn @click="previousVideo">
               <div class="mdi mdi-36px mdi-skip-previous-circle-outline"></div>
@@ -41,6 +41,14 @@
               {{ Math.floor(videoInfo.videoProgress / 60) }}:{{
                 videoInfo.videoProgress -
                 Math.floor(videoInfo.videoProgress / 60) * 60
+              }}
+              /
+              {{ Math.floor(videoInfo.videoLength / 60) }}:{{
+                // ~~ Is a shorthand for Math.floor
+                ~~(
+                  videoInfo.videoLength -
+                  Math.floor(videoInfo.videoLength / 60) * 60
+                )
               }}
               <v-slider
                 v-model="videoInfo.videoProgress"
@@ -68,6 +76,7 @@
         <v-row v-if="playlistItems.length">
           <v-col cols="12">
             <v-virtual-scroll
+              ref="virtualScroll"
               v-chat-scroll="{ always: false, smooth: true }"
               :items="playlistItems"
               height="250"
@@ -134,7 +143,7 @@ export default {
       videoInfo: {
         position: undefined,
         videoId: undefined,
-        videoLength: undefined,
+        videoLength: 0,
         videoProgress: 0,
       },
       playerVars: {
@@ -287,6 +296,8 @@ export default {
         () => this.videoInfo.videoProgress++,
         1000
       )
+
+      this.$refs.virtualScroll.$el.scrollTop = this.videoInfo.position * 53
     },
 
     paused() {
