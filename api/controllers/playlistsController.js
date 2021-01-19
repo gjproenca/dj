@@ -1,5 +1,4 @@
 const validator = require('express-validator')
-// const mongoose = require('mongoose')
 const Playlist = require('../models/Playlist.js')
 
 // Create Playlist
@@ -48,6 +47,16 @@ module.exports.readPlaylist = async (req, res) => {
       playlist_id: req.headers.playlist_id,
     }).orFail()
     return res.status(200).json({ playlist })
+  } catch (error) {
+    return res.status(500).json({ error: error.message })
+  }
+}
+
+// Update Playlist
+module.exports.refreshPlaylist = async (req, res) => {
+  try {
+    // eslint-disable-next-line
+    const playlist = await this.readPlaylist(req, res)
   } catch (error) {
     return res.status(500).json({ error: error.message })
   }

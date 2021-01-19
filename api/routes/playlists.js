@@ -20,4 +20,10 @@ router.get(
   playlistsController.readPlaylist
 )
 
+router.get(
+  '/playlist/refresh',
+  config.isAuthenticated,
+  playlistsController.refreshPlaylist
+)
+
 module.exports = router
