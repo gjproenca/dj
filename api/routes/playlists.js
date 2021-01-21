@@ -3,27 +3,28 @@ const config = require('../config.js')
 
 const router = Router()
 
-// Initialize Controller
+// Initialize controller
 const playlistsController = require('../controllers/playlistsController.js')
 
-// Create Playlist
+// Create playlist
 router.post(
   '/playlist',
   config.isAuthenticated,
   playlistsController.createPlaylist
 )
 
-// Read Playlist
+// Read playlist
 router.get(
   '/playlist',
   config.isAuthenticated,
   playlistsController.readPlaylist
 )
 
-router.get(
-  '/playlist/refresh',
+// Delete playlist
+router.delete(
+  '/playlist/:playlist_id',
   config.isAuthenticated,
-  playlistsController.refreshPlaylist
+  playlistsController.deletePlaylist
 )
 
 module.exports = router

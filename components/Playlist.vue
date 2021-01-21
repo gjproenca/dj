@@ -65,7 +65,7 @@
           <v-col cols="12">
             <v-text-field
               v-model="playlistId"
-              label="Playlist Url"
+              label="Playlist Id/Url"
             ></v-text-field>
             <v-btn :disabled="!playlistId" @click="loadPlaylist"
               >Load Playlist</v-btn
@@ -186,6 +186,8 @@ export default {
 
         if (playlistId) {
           playlistId = playlistId[0].replace('list=', '')
+        } else {
+          playlistId = this.playlistId
         }
 
         // Attempt to load playlist from mongoDb
@@ -207,6 +209,8 @@ export default {
           let nextPageToken = ''
           let requestReadPlaylistYoutube
           let responseReadPlaylistYoutube
+
+          // TODO: adapt or extract to playlist to playlist utils so I can update the playlist
 
           do {
             requestReadPlaylistYoutube = await fetch(
