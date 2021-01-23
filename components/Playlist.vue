@@ -80,9 +80,45 @@
           </v-col>
 
           <v-col v-if="playlistItems.length !== 0" cols="6">
-            <v-btn :disabled="!playlistId" @click="updatePlaylist"
-              >Update Playlist</v-btn
+            <v-dialog
+              v-model="showDialogUpdatePlaylist"
+              persistent
+              max-width="477"
             >
+              <template #activator="{ on, attrs }">
+                <v-btn :disabled="!playlistId" v-bind="attrs" v-on="on"
+                  >Update Playlist</v-btn
+                >
+              </template>
+              <v-card>
+                <v-card-title class="headline"> Update Playlist? </v-card-title>
+                <v-card-text>
+                  As this is a free website, updating playlists often, can cause
+                  the load and update functions to stop working, as there is a
+                  limited amount of credits alocated to the site
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary"
+                    text
+                    @click="showDialogUpdatePlaylist = false"
+                  >
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="
+                      showDialogUpdatePlaylist = false
+                      updatePlaylist()
+                    "
+                  >
+                    Continue
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-col>
         </v-row>
 
@@ -168,6 +204,8 @@ export default {
       isPlaying: false,
 
       videoProgressInterval: undefined,
+
+      showDialogUpdatePlaylist: false,
     }
   },
 
@@ -290,7 +328,6 @@ export default {
     },
 
     async updatePlaylist() {
-      alert('Are you sure?')
       try {
         await fetch(`${process.env.BASE_URL}/api/playlist/${this.playlistId}`, {
           method: 'DELETE',
