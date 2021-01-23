@@ -23,19 +23,23 @@
               <div class="mdi mdi-36px mdi-skip-previous-circle-outline"></div>
             </v-btn>
           </v-col>
+
           <v-col cols="4" align="center">
             <v-btn v-if="isPlaying" @click="playVideo">
               <div class="mdi mdi-36px mdi-play-circle-outline"></div>
             </v-btn>
+
             <v-btn v-else @click="pauseVideo">
               <div class="mdi mdi-36px mdi-pause-circle-outline"></div>
             </v-btn>
           </v-col>
+
           <v-col cols="4" align="center">
             <v-btn @click="nextVideo">
               <div class="mdi mdi-36px mdi-skip-next-circle-outline"></div>
             </v-btn>
           </v-col>
+
           <v-col cols="12" align="center">
             <div>
               {{ Math.floor(videoInfo.videoProgress / 60) }}:{{
@@ -67,8 +71,17 @@
               v-model="playlistId"
               label="Playlist Id/Url"
             ></v-text-field>
+          </v-col>
+
+          <v-col cols="6">
             <v-btn :disabled="!playlistId" @click="loadPlaylist"
               >Load Playlist</v-btn
+            >
+          </v-col>
+
+          <v-col v-if="playlistItems.length !== 0" cols="6">
+            <v-btn :disabled="!playlistId" @click="updatePlaylist"
+              >Update Playlist</v-btn
             >
           </v-col>
         </v-row>
@@ -182,6 +195,8 @@ export default {
   methods: {
     async loadPlaylist() {
       try {
+        this.playlistItems = []
+        // FIXME: playlist id url extraction not working correctly
         let playlistId = this.playlistId.match(/list=\w+/)
 
         if (playlistId) {
@@ -201,6 +216,7 @@ export default {
             },
           }
         )
+
         const responseReadPlaylistMongo = await requestReadPlaylistMongo.json()
 
         // If playlist does not exist in mongoDb fetch it from youtube
@@ -255,7 +271,7 @@ export default {
           this.playlistItems = responseReadPlaylistMongo.playlist.playlist_items
         }
 
-        this.playlistVideoIds = this.playlistItems.map(
+        this.playlistVideoIds = await this.playlistItems.map(
           (item) => item.snippet.resourceId.videoId
         )
 
@@ -264,6 +280,30 @@ export default {
           this.videoInfo.position = 0
           this.videoInfo.videoId = this.playlistVideoIds[0]
         }
+      } catch (error) {
+        this.$toast.error(error.message, {
+          icon: {
+            name: 'mdi-alert',
+          },
+        })
+      }
+    },
+
+    async updatePlaylist() {
+      alert('Are you sure?')
+      try {
+        await fetch(`${process.env.BASE_URL}/api/playlist/${this.playlistId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: this.$auth.getToken('local'),
+          },
+        })
+
+        this.playlistItems = await []
+
+        await this.loadPlaylist()
       } catch (error) {
         this.$toast.error(error.message, {
           icon: {
