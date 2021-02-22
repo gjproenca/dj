@@ -79,7 +79,10 @@
             >
           </v-col>
 
-          <v-col v-if="playlistItems.length !== 0" cols="6">
+          <v-col
+            v-if="playlistItems.length !== 0 && currentPlaylist === playlistId"
+            cols="6"
+          >
             <v-dialog
               v-model="showDialogUpdatePlaylist"
               persistent
@@ -183,6 +186,8 @@ export default {
 
   data() {
     return {
+      currentPlaylist: '',
+
       playlistId: '',
       playlistItems: [],
       // FIXME: Find way to remove playlist video ids ie: only use
@@ -233,6 +238,7 @@ export default {
   methods: {
     async loadPlaylist() {
       try {
+        this.currentPlaylist = this.playlistId
         this.playlistItems = []
         // FIXME: playlist id url extraction not working correctly
         let playlistId = this.playlistId.match(/list=\w+/)
