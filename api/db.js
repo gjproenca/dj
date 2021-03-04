@@ -12,7 +12,7 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 const db = mongoose.connection
 db.on('error', () => console.log(chalk.red('MongoDB Connection Error')))
 db.once('open', () => {
-  console.log(chalk.green('MongoDB Connected'))
+  console.log(chalk.green('MongoDB Connected on http://localhost:3000'))
 })
 
 module.exports = db
