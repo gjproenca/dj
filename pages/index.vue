@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="wrapper_filter-blue">
+    <div>
       <v-container class="container" fill-height fluid>
         <v-row class="d-flex justify-center">
           <v-col class="foo" sm="8" md="6">
@@ -31,15 +31,10 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper {
-  background-image: url('~assets/images/index.jpg');
+  background-image: url('~assets/images/mink-mingle-HRyjETL87Gg-unsplash.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-}
-
-.wrapper_filter-blue {
-  background-color: #292d31;
-  opacity: 0.9;
 }
 
 .container {
