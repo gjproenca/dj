@@ -34,10 +34,10 @@ export default {
         },
       })
       const {
-        room: { created_by: createdBy },
+        room: { owner_id: ownerId },
       } = await requestRoom.json()
 
-      return { isOwner: $auth.user._id === createdBy }
+      return { isOwner: $auth.user._id === ownerId }
     } catch (error) {
       console.log(error)
     }

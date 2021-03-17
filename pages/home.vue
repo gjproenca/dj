@@ -8,7 +8,14 @@
       <!-- <client-only placeholder="Loading..."> -->
       <div v-if="rooms.length">
         <v-row>
-          <v-col v-for="(room, index) in rooms" :key="index" cols="3">
+          <v-col
+            v-for="(room, index) in rooms"
+            :key="index"
+            xs="12"
+            sm="4"
+            md="3"
+            xl="2"
+          >
             <n-link :to="encodeURI(`/room/${room.room_name}`)" class="link">
               <RoomCard :title="room.room_name" :owner="room.owner_name" />
             </n-link>
