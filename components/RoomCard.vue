@@ -1,19 +1,13 @@
 <template>
   <div>
-    <v-row>
-      <v-col cols="3" align="center">
-        <v-card>
-          <img
-            :src="avatarImageUrl"
-            alt="Room avatar image"
-            style="height: 250px"
-          />
-          <v-card-title class="justify-center">{{ title }}</v-card-title>
-          <v-card-subtitle>{{ owner }}</v-card-subtitle>
-          <v-card-text>{{ description }}</v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-card align="center">
+      <img :src="avatarImageUrl" alt="Room avatar image" class="card__avatar" />
+      <v-card-title class="justify-center">{{ title }}</v-card-title>
+      <v-card-subtitle
+        ><i>by {{ owner }}</i></v-card-subtitle
+      >
+      <v-card-text>{{ description }}</v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -40,3 +34,10 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.card__avatar {
+  height: 25vh;
+  width: auto;
+}
+</style>

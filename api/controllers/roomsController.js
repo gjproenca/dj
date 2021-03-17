@@ -6,10 +6,13 @@ const Room = require('../models/Room.js')
 module.exports.createRoom = [
   // validation rules
   validator
-    .body('room_name', 'Please enter the Room Name')
+    .body('room_name', 'Please enter the room_name')
     .isLength({ min: 1 }),
   validator
-    .body('created_by', 'Please enter Created By (ObjectId)')
+    .body('owner_id', 'Please enter owner_id (ObjectId)')
+    .isLength({ min: 1 }),
+  validator
+    .body('owner_name', 'Please enter the owner_name')
     .isLength({ min: 1 }),
   validator.body('room_name').custom((value) => {
     return Room.findOne({ room_name: value }).then((room) => {
@@ -29,7 +32,8 @@ module.exports.createRoom = [
     // initialize record
     const room = new Room({
       room_name: req.body.room_name,
-      created_by: req.body.created_by,
+      owner_id: req.body.owner_id,
+      owner_name: req.body.owner_name,
       live: req.body.live,
     })
 

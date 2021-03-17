@@ -7,20 +7,18 @@
 
       <!-- <client-only placeholder="Loading..."> -->
       <div v-if="rooms.length">
-        <div v-for="(room, index) in rooms" :key="index">
-          <n-link :to="encodeURI(`/room/${room.room_name}`)" class="link">
-            <v-btn>Join Room {{ room.room_name }}</v-btn>
-          </n-link>
-
-          <v-divider class="mt-3 mb-3" />
-        </div>
+        <v-row>
+          <v-col v-for="(room, index) in rooms" :key="index" cols="3">
+            <n-link :to="encodeURI(`/room/${room.room_name}`)" class="link">
+              <RoomCard :title="room.room_name" :owner="room.owner_name" />
+            </n-link>
+          </v-col>
+        </v-row>
       </div>
       <div v-else>
         {{ error }}
       </div>
       <!-- </client-only> -->
-
-      <RoomCard title="Test Room" owner="by Test Owner" />
     </v-container>
   </div>
 </template>

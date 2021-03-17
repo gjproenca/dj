@@ -40,24 +40,38 @@ export default {
 
         const id = new mongoose.Types.ObjectId(user._id)
 
-        await fetch(`${process.env.BASE_URL}/api/room`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: this.$auth.getToken('local'),
-          },
-          body: JSON.stringify({
-            room_name: this.roomName,
-            created_by: id,
-            live: true,
-          }),
-        })
+        const POST_CREATE_ROOM = await fetch(
+          `${process.env.BASE_URL}/api/room`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: this.$auth.getToken('local'),
+            },
+            body: JSON.stringify({
+              room_name: this.roomName,
+              owner_id: id,
+              owner_name: user.full_name,
+              live: true,
+            }),
+          }
+        )
 
-        this.$toast.success('Room created', {
-          icon: {
-            name: 'mdi-check',
-          },
-        })
+        const RESPONSE_POST_CREATE_ROOM = await POST_CREATE_ROOM.json()
+
+        if (RESPONSE_POST_CREATE_ROOM.errors) {
+          this.$toast.error(RESPONSE_POST_CREATE_ROOM.errors.room_name.msg, {
+            icon: {
+              name: 'mdi-alert',
+            },
+          })
+        } else {
+          this.$toast.success('Room created', {
+            icon: {
+              name: 'mdi-check',
+            },
+          })
+        }
 
         this.roomName = ''
 
