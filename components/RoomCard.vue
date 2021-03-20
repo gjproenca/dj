@@ -17,7 +17,7 @@ export default {
     avatarImageUrl: {
       type: String,
       default:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/No_image_available_400_x_600.svg/512px-No_image_available_400_x_600.svg.png',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png',
     },
     title: {
       type: String,
@@ -39,5 +39,6 @@ export default {
 .card__avatar {
   height: 25vh;
   width: auto;
+  padding-top: 16px;
 }
 </style>

@@ -1,5 +1,7 @@
 <template>
   <div>
+    <div class="jumbotron"></div>
+
     <v-container>
       <CreateRoom />
 
@@ -66,6 +68,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.jumbotron {
+  background: url('../assets/images/konstantinos-hasandras-aivbDhWuFyw-unsplash.jpg');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: calc(100vh - 56px);
+  width: auto;
+}
+
 .link {
   text-decoration: none;
 }
