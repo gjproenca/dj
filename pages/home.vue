@@ -69,7 +69,7 @@ export default {
 
 <style lang="scss" scoped>
 .jumbotron {
-  background: url('../assets/images/konstantinos-hasandras-aivbDhWuFyw-unsplash.jpg');
+  background-image: url('../assets/images/konstantinos-hasandras-aivbDhWuFyw-unsplash.jpg');
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;

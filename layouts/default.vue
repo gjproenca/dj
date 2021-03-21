@@ -10,7 +10,7 @@
       <nuxt />
     </v-main>
 
-    <v-footer>
+    <v-footer absolute app>
       <v-row>
         <v-col cols="12" align="center" justify="center">
           <span>Copyright &copy; GProenca {{ new Date().getFullYear() }} </span>
