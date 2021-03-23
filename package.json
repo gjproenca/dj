@@ -34,7 +34,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.10.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.19",
+    "mongoose": "^5.12.2",
     "nuxt": "^2.15.2",
     "socket.io": "^3.1.2",
     "socket.io-client": "^3.1.2",
