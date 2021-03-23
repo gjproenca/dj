@@ -3,23 +3,19 @@ const config = require('../config.js')
 
 const router = Router()
 
-// Initialize Controller
+// Initialize controller
 const roomsController = require('../controllers/roomsController.js')
 
-// Create Room
+// Create room
 router.post('/room', config.isAuthenticated, roomsController.createRoom)
 
-// Read Room
+// Read room
 router.get('/room', config.isAuthenticated, roomsController.readRoom)
 
-// Read Rooms
+// Read rooms
 router.get('/rooms', config.isAuthenticated, roomsController.readRooms)
 
-// Read Rooms On Air
-router.get(
-  '/rooms/live',
-  config.isAuthenticated,
-  roomsController.readRoomsOnAir
-)
+// Read Rooms live
+router.get('/rooms/live', config.isAuthenticated, roomsController.readRoomsLive)
 
 module.exports = router

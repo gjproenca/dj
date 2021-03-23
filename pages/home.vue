@@ -19,7 +19,11 @@
             xl="2"
           >
             <n-link :to="encodeURI(`/room/${room.room_name}`)" class="link">
-              <RoomCard :title="room.room_name" :owner="room.owner_name" />
+              <RoomCard
+                :title="room.room_name"
+                :owner="room.owner_name"
+                :description="room.description"
+              />
             </n-link>
           </v-col>
         </v-row>

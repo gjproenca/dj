@@ -11,20 +11,20 @@ module.exports.createRoom = [
   validator
     .body('owner_id', 'Please enter owner_id (ObjectId)')
     .isLength({ min: 1 }),
+  validator.body('owner_id').custom((value) => {
+    return Room.findOne({ owner_id: value }).then((room) => {
+      if (room !== null) {
+        return Promise.reject(new Error('Only one room per user allowed'))
+      }
+    })
+  }),
   validator
     .body('owner_name', 'Please enter the owner_name')
     .isLength({ min: 1 }),
   validator.body('room_name').custom((value) => {
     return Room.findOne({ room_name: value }).then((room) => {
       if (room !== null) {
-        return Promise.reject(new Error('Room name exists'))
-      }
-    })
-  }),
-  validator.body('owner_id').custom((value) => {
-    return Room.findOne({ owner_id: value }).then((room) => {
-      if (room !== null) {
-        return Promise.reject(new Error('Only one room per user allowed'))
+        return Promise.reject(new Error('Room name already taken'))
       }
     })
   }),
@@ -41,6 +41,7 @@ module.exports.createRoom = [
       room_name: req.body.room_name,
       owner_id: req.body.owner_id,
       owner_name: req.body.owner_name,
+      description: req.body.description,
       live: req.body.live,
     })
 
@@ -82,8 +83,8 @@ module.exports.readRooms = async (req, res) => {
   }
 }
 
-// Read Rooms On Air
-module.exports.readRoomsOnAir = async (req, res) => {
+// Read Rooms Live
+module.exports.readRoomsLive = async (req, res) => {
   try {
     const rooms = await Room.find({ live: true }).orFail(
       new Error('No rooms live!')

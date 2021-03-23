@@ -2,7 +2,7 @@
   <div>
     <h1>Create Room</h1>
 
-    <v-form @submit.prevent>
+    <v-form @submit.prevent="createRoom">
       <v-row>
         <v-col cols="8">
           <v-text-field
@@ -20,12 +20,13 @@
 
         <v-col cols="12">
           <v-textarea
+            v-model="description"
             counter
             auto-grow
             clearable
             label="Description"
+            rows="1"
             :rules="rulesDescripton"
-            :value="description"
             @click:clear.prevent.stop
           ></v-textarea>
         </v-col>
@@ -43,7 +44,7 @@ export default {
       roomName: '',
       description: '',
 
-      rulesDescripton: [(v) => v || v.length <= 150 || 'Max 150 characters'],
+      rulesDescripton: [(v) => !v || v.length <= 150 || 'Max 150 characters'],
     }
   },
 
@@ -74,6 +75,7 @@ export default {
               room_name: this.roomName,
               owner_id: id,
               owner_name: user.full_name,
+              description: this.description,
               live: true,
             }),
           }
@@ -81,6 +83,10 @@ export default {
 
         const RESPONSE_POST_CREATE_ROOM = await POST_CREATE_ROOM.json()
 
+        // Show toast errors when creating a room, errors.owner_id.msg
+        // for a user trying to create more than one room.
+        // Errors.room_name.msg for when a user is able and tries to create a room
+        // but the name is already taken
         if (RESPONSE_POST_CREATE_ROOM.errors) {
           this.$toast.error(
             RESPONSE_POST_CREATE_ROOM.errors.owner_id.msg ||
@@ -91,7 +97,6 @@ export default {
               },
             }
           )
-
           return
         } else {
           this.$toast.success('Room created', {
