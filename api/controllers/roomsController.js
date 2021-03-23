@@ -21,6 +21,13 @@ module.exports.createRoom = [
       }
     })
   }),
+  validator.body('owner_id').custom((value) => {
+    return Room.findOne({ owner_id: value }).then((room) => {
+      if (room !== null) {
+        return Promise.reject(new Error('Only one room per user allowed'))
+      }
+    })
+  }),
 
   (req, res) => {
     // throw validation errors

@@ -2,15 +2,34 @@
   <div>
     <h1>Create Room</h1>
 
-    <v-form @submit.prevent="createRoom">
-      <v-text-field
-        v-model="roomName"
-        label="Room name"
-        :append-icon="roomName ? 'mdi-send' : ''"
-        clear-icon="mdi-close-circle"
-        clearable
-        @click:append="createRoom"
-      ></v-text-field>
+    <v-form @submit.prevent>
+      <v-row>
+        <v-col cols="8">
+          <v-text-field
+            v-model="roomName"
+            label="Room name"
+            :append-icon="roomName ? 'mdi-send' : ''"
+            clearable
+            @click:append="createRoom"
+          ></v-text-field>
+        </v-col>
+
+        <v-col cols="4">
+          <v-file-input accept="image/*" label="Room avatar"></v-file-input>
+        </v-col>
+
+        <v-col cols="12">
+          <v-textarea
+            counter
+            auto-grow
+            clearable
+            label="Description"
+            :rules="rulesDescripton"
+            :value="description"
+            @click:clear.prevent.stop
+          ></v-textarea>
+        </v-col>
+      </v-row>
     </v-form>
   </div>
 </template>
@@ -22,6 +41,9 @@ export default {
   data() {
     return {
       roomName: '',
+      description: '',
+
+      rulesDescripton: [(v) => v || v.length <= 150 || 'Max 150 characters'],
     }
   },
 
@@ -60,11 +82,17 @@ export default {
         const RESPONSE_POST_CREATE_ROOM = await POST_CREATE_ROOM.json()
 
         if (RESPONSE_POST_CREATE_ROOM.errors) {
-          this.$toast.error(RESPONSE_POST_CREATE_ROOM.errors.room_name.msg, {
-            icon: {
-              name: 'mdi-alert',
-            },
-          })
+          this.$toast.error(
+            RESPONSE_POST_CREATE_ROOM.errors.owner_id.msg ||
+              RESPONSE_POST_CREATE_ROOM.errors.room_name.msg,
+            {
+              icon: {
+                name: 'mdi-alert',
+              },
+            }
+          )
+
+          return
         } else {
           this.$toast.success('Room created', {
             icon: {
