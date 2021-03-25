@@ -1,9 +1,24 @@
+import { v4 as uuidv4 } from 'uuid'
 const validator = require('express-validator')
-// const mongoose = require('mongoose')
+const multer = require('multer')
 const Room = require('../models/Room.js')
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/rooms/avatars')
+  },
+  filename: (req, file, cb) => {
+    const extArray = file.mimetype.split('/')
+    const extension = extArray[extArray.length - 1]
+    cb(null, `${uuidv4()}.${extension}`)
+  },
+})
+const upload = multer({ storage })
 
 // Create Room
 module.exports.createRoom = [
+  upload.single('avatar'),
+
   // validation rules
   validator
     .body('room_name', 'Please enter the room_name')
@@ -43,6 +58,7 @@ module.exports.createRoom = [
       owner_name: req.body.owner_name,
       description: req.body.description,
       live: req.body.live,
+      avatar: req.file,
     })
 
     // save record

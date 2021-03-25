@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card align="center">
-      <img :src="avatarImageUrl" alt="Room avatar image" class="card__avatar" />
+      <img :src="avatarUrl" alt="Room avatar image" class="card__avatar" />
       <v-card-title class="justify-center">{{ title }}</v-card-title>
       <v-card-subtitle
         ><i>by {{ owner }}</i></v-card-subtitle
@@ -14,7 +14,7 @@
 <script>
 export default {
   props: {
-    avatarImageUrl: {
+    avatarUrl: {
       type: String,
       default:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png',

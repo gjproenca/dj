@@ -23,6 +23,7 @@
                 :title="room.room_name"
                 :owner="room.owner_name"
                 :description="room.description"
+                :avatar-url="avatarUri(room.avatar.filename)"
               />
             </n-link>
           </v-col>
@@ -67,6 +68,12 @@ export default {
       rooms: [],
       error: '',
     }
+  },
+
+  methods: {
+    avatarUri(avatarFileName) {
+      return `${process.env.BASE_URL}/api/room/avatar/${avatarFileName}`
+    },
   },
 }
 </script>

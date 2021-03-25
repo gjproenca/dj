@@ -1,3 +1,4 @@
+const path = require('path')
 const { Router } = require('express')
 const config = require('../config.js')
 
@@ -17,5 +18,14 @@ router.get('/rooms', config.isAuthenticated, roomsController.readRooms)
 
 // Read Rooms live
 router.get('/rooms/live', config.isAuthenticated, roomsController.readRoomsLive)
+
+// Read avatar
+router.get('/room/avatar/:avatarName', (req, res) => {
+  res.sendFile(
+    path.resolve(
+      `${__dirname}'../../../uploads/rooms/avatars/${req.params.avatarName}`
+    )
+  )
+})
 
 module.exports = router

@@ -15,7 +15,11 @@
         </v-col>
 
         <v-col cols="4">
-          <v-file-input accept="image/*" label="Room avatar"></v-file-input>
+          <v-file-input
+            v-model="avatar"
+            accept="image/*"
+            label="Room avatar"
+          ></v-file-input>
         </v-col>
 
         <v-col cols="12">
@@ -43,6 +47,7 @@ export default {
     return {
       roomName: '',
       description: '',
+      avatar: [],
 
       rulesDescripton: [(v) => !v || v.length <= 150 || 'Max 150 characters'],
     }
@@ -63,21 +68,24 @@ export default {
 
         const id = new mongoose.Types.ObjectId(user._id)
 
+        const formData = new FormData()
+        formData.append('room_name', this.roomName)
+        formData.append('owner_id', id)
+        formData.append('owner_name', user.full_name)
+        formData.append('description', this.description)
+        // TODO: Make the logic for live rooms as they are always
+        // live by default
+        formData.append('live', true)
+        formData.append('avatar', this.avatar)
+
         const POST_CREATE_ROOM = await fetch(
           `${process.env.BASE_URL}/api/room`,
           {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
               Authorization: this.$auth.getToken('local'),
             },
-            body: JSON.stringify({
-              room_name: this.roomName,
-              owner_id: id,
-              owner_name: user.full_name,
-              description: this.description,
-              live: true,
-            }),
+            body: formData,
           }
         )
 
