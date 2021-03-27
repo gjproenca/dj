@@ -84,7 +84,7 @@ export default {
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
-  height: calc(100vh - 56px);
+  height: calc(50vh);
   width: auto;
 }
 

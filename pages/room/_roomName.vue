@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row fill-height fluid>
+    <v-row class="mt-2 mb-2" fill-height fluid>
       <v-col cols="6">
         <Playlist :socket="socket" :is-owner="isOwner" />
       </v-col>
