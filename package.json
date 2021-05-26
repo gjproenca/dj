@@ -31,7 +31,7 @@
     "@nuxtjs/toast": "^3.3.1",
     "@nuxtjs/vuetify": "^1.11.3",
     "bcryptjs": "^2.4.3",
-    "core-js": "^3.9.1",
+    "core-js": "^3.13.0",
     "emailjs-com": "^2.6.4",
     "express": "^4.17.1",
     "express-validator": "^6.10.0",
