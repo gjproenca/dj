@@ -40,7 +40,7 @@
     "multer": "^1.4.2",
     "nuxt": "^2.15.2",
     "socket.io": "^3.1.2",
-    "socket.io-client": "^3.1.2",
+    "socket.io-client": "^4.3.0",
     "uuid": "^8.3.2",
     "vue-chat-scroll": "^1.4.0",
     "vue-youtube": "^1.4.0"
